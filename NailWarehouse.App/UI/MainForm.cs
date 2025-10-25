@@ -58,7 +58,7 @@ public partial class MainForm : Form
     private void UpdateStats()
     {
         var totalRows = nails.Count;
-        var totalPrice = nails.Sum(nailType => nailType.Price);
+        var totalPrice = nails.Sum(nailType => nailType.TotalPrice);
         var taxedTotalPrice = totalPrice * (1m + Tax);
 
         TotalRowsLabel.Text = string.Format(TotalRowsTemplate, totalRows);
