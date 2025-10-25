@@ -7,6 +7,9 @@ namespace NailWarehouse.App.UI;
 /// </summary>
 public partial class NailTypeForm : Form
 {
+    private const string DeleteMessageBoxTitle = "Удаление";
+    private const string DeleteMessageBoxText = "Вы уверены?";
+
     private NailTypeForm(NailType nailType)
     {
         InitializeComponent();
@@ -43,6 +46,16 @@ public partial class NailTypeForm : Form
             nailType.CancelEdit();
         }
     }
+
+    /// <summary>
+    /// Отображает <see cref="MessageBox"/> для подтверждения удаления пользователем.
+    /// </summary>
+    /// <returns><see cref="DialogResult.OK>"/> или <see cref="DialogResult.Cancel"/>.</returns>
+    public static DialogResult AskDeleteNailType() =>
+        MessageBox.Show(DeleteMessageBoxText,
+            DeleteMessageBoxTitle,
+            MessageBoxButtons.OKCancel,
+            MessageBoxIcon.Warning);
 
     private void NailTypeForm_FormClosing(object sender, FormClosingEventArgs e)
     {

@@ -11,8 +11,6 @@ public partial class MainForm : Form
     private const decimal Tax = 0.2m;
     private const string TotalRowsTemplate = "Общее количество товарных позиций: {0}";
     private const string TotalPriceTemplate = "Общая сумма товаров без НДС: {0:c}";
-    private const string DeleteMessageBoxTitle = "Удаление";
-    private const string DeleteMessageBoxText = "Вы уверены?";
 
     private static readonly string TaxedTotalPriceTemplate = $"Общая сумма товаров с НДС {Tax:p0}: {{0:c}}";
 
@@ -103,12 +101,7 @@ public partial class MainForm : Form
 
     private void DeleteButton_Click(object sender, EventArgs e)
     {
-        var response = MessageBox.Show(DeleteMessageBoxText,
-            DeleteMessageBoxTitle,
-            MessageBoxButtons.OKCancel,
-            MessageBoxIcon.Warning);
-
-        if (response == DialogResult.OK)
+        if (NailTypeForm.AskDeleteNailType() == DialogResult.OK)
         {
             BindingSource.RemoveCurrent();
         }
