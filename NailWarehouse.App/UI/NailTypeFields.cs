@@ -9,14 +9,6 @@ namespace NailWarehouse.App.UI;
 /// </summary>
 public partial class NailTypeFields : UserControl
 {
-    private readonly IEnumerable<ValidationAttribute> materialValidationAttributes =
-    [
-        new DeniedValuesAttribute(Material.Null)
-        {
-            ErrorMessage = "Поле \"{0}\" содержит недопустимое значение."
-        }
-    ];
-
     /// <summary>
     /// Создаёт <see cref="NailTypeFields"/>.
     /// </summary>
@@ -124,7 +116,7 @@ public partial class NailTypeFields : UserControl
 
             var results = new List<ValidationResult>();
 
-            if (!Validator.TryValidateValue(MaterialComboBox.SelectedItem, context, results, materialValidationAttributes))
+            if (!Validator.TryValidateValue(MaterialComboBox.SelectedItem, context, results, NailType.MaterialValidationAttributes))
             {
                 e.Cancel = true;
                 if (results.FirstOrDefault() is ValidationResult result)

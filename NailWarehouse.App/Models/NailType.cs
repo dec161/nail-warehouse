@@ -12,6 +12,17 @@ public class NailType : IEditableObject
     private NailType? backup = null;
 
     /// <summary>
+    /// Атрибуты для валидации <see cref="Material"/>.
+    /// </summary>
+    public static IEnumerable<ValidationAttribute> MaterialValidationAttributes { get; } =
+    [
+        new DeniedValuesAttribute(Material.Null)
+        {
+            ErrorMessage = "Поле \"{0}\" содержит недопустимое значение."
+        }
+    ];
+
+    /// <summary>
     /// Идентификатор.
     /// </summary>
     public Guid Id { get; init; } = Guid.NewGuid();
