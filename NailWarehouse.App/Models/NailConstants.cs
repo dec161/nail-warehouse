@@ -3,7 +3,7 @@
 /// <summary>
 /// Константы.
 /// </summary>
-internal static class NailConstants
+internal class NailConstants
 {
     /// <summary>
     /// Минимальная длина названия гвоздя.
