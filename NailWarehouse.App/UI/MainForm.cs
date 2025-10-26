@@ -9,10 +9,6 @@ namespace NailWarehouse.App.UI;
 public partial class MainForm : Form
 {
     private const decimal Tax = 0.2m;
-    private const string TotalRowsTemplate = "Общее количество товарных позиций: {0}";
-    private const string TotalPriceTemplate = "Общая сумма товаров без НДС: {0:c}";
-
-    private static readonly string TaxedTotalPriceTemplate = $"Общая сумма товаров с НДС {Tax:p0}: {{0:c}}";
 
     private readonly BindingList<NailType> nails =
     [
@@ -59,9 +55,9 @@ public partial class MainForm : Form
         var totalPrice = nails.Sum(nailType => nailType.TotalPrice);
         var taxedTotalPrice = totalPrice * (1m + Tax);
 
-        TotalRowsLabel.Text = string.Format(TotalRowsTemplate, totalRows);
-        TotalPriceLabel.Text = string.Format(TotalPriceTemplate, totalPrice);
-        TaxedTotalPriceLabel.Text = string.Format(TaxedTotalPriceTemplate, taxedTotalPrice);
+        TotalRowsLabel.Text = $"Общее количество товарных позиций: {totalRows}";
+        TotalPriceLabel.Text = $"Общая сумма товаров без НДС: {totalPrice:c}";
+        TaxedTotalPriceLabel.Text = $"Общая сумма товаров с НДС {Tax:p0}: {taxedTotalPrice:c}";
     }
 
     private void EditSelection()
