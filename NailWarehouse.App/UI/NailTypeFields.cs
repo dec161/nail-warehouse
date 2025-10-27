@@ -23,11 +23,10 @@ public partial class NailTypeFields : UserControl
     {
         NameTextBox.AddBinding(textBox => textBox.Text, nailType, nailType => nailType.Name, ErrorProvider);
         NailSizeFields.AddBinding(nailSizeFields => nailSizeFields.NailSize, nailType, nailType => nailType.Size, ErrorProvider);
+        MaterialComboBox.AddEnumBinding(nailType, nailType => nailType.Material, ErrorProvider);
         AmountNumericUpDown.AddBinding(numericUpDown => numericUpDown.Value, nailType, nailType => nailType.Amount, ErrorProvider);
         MinAmountNumericUpDown.AddBinding(numericUpDown => numericUpDown.Value, nailType, nailType => nailType.MinAmount, ErrorProvider);
         PriceNumericUpDown.AddBinding(numericUpDown => numericUpDown.Value, nailType, nailType => nailType.Price, ErrorProvider);
-
-        AddMaterialBinding(nailType);
 
         SetFieldValues(nailType);
     }
@@ -47,20 +46,5 @@ public partial class NailTypeFields : UserControl
         MinAmountNumericUpDown.Maximum = NailConstants.MaxMinAmount;
         PriceNumericUpDown.Minimum = NailConstants.MinPrice;
         PriceNumericUpDown.Maximum = NailConstants.MaxPrice;
-    }
-
-    private void AddMaterialBinding(NailType dataSource)
-    {
-        var materials = Enum.GetValues(typeof(Material))
-            .Cast<Material>()
-            .Select(material => new { Value = material, Name = material.GetDisplayName() })
-            .ToArray();
-        MaterialComboBox.DataSource = materials;
-
-        var material = materials[0];
-        MaterialComboBox.DisplayMember = nameof(material.Name);
-        MaterialComboBox.ValueMember = nameof(material.Value);
-
-        MaterialComboBox.AddBinding(comboBox => comboBox.SelectedValue!, dataSource, nailType => nailType.Material, ErrorProvider);
     }
 }
