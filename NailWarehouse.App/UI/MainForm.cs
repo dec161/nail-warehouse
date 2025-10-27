@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using NailWarehouse.App.Infrastructure;
 using NailWarehouse.App.Models;
 
 namespace NailWarehouse.App.UI;
@@ -112,6 +113,14 @@ public partial class MainForm : Form
 
         EditButton.Enabled = anyRowsSelected;
         DeleteButton.Enabled = anyRowsSelected;
+    }
+
+    private void DataGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+    {
+        if (e.Value is Material material)
+        {
+            e.Value = material.GetDisplayName();
+        }
     }
 
     private void BindingSource_ListChanged(object sender, ListChangedEventArgs e) =>

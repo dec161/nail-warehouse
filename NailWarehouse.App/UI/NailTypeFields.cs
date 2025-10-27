@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using NailWarehouse.App.Infrastructure;
 using NailWarehouse.App.Models;
 
 namespace NailWarehouse.App.UI;
@@ -94,9 +95,17 @@ public partial class NailTypeFields : UserControl
 
     private void AddMaterialBinding(NailType dataSource)
     {
-        MaterialComboBox.DataSource = Material.All;
+        var materials = Enum.GetValues(typeof(Material))
+            .Cast<Material>()
+            .Select(material => new { Value = material, Name = material.GetDisplayName() })
+            .ToArray();
+        MaterialComboBox.DataSource = materials;
 
-        var propertyName = nameof(ComboBox.SelectedItem);
+        var material = materials[0];
+        MaterialComboBox.DisplayMember = nameof(material.Name);
+        MaterialComboBox.ValueMember = nameof(material.Value);
+
+        var propertyName = nameof(ComboBox.SelectedValue);
         var dataMember = nameof(NailType.Material);
 
         var binding = new Binding(propertyName, dataSource, dataMember)

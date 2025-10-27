@@ -40,7 +40,6 @@ partial class MainForm
         SeparatorPriceTotalPrice = new ToolStripStatusLabel();
         TaxedTotalPriceLabel = new ToolStripStatusLabel();
         DataGridView = new DataGridView();
-        BindingSource = new BindingSource(components);
         NameColumn = new DataGridViewTextBoxColumn();
         SizeColumn = new DataGridViewTextBoxColumn();
         MaterialColumn = new DataGridViewTextBoxColumn();
@@ -48,6 +47,7 @@ partial class MainForm
         MinAmountColumn = new DataGridViewTextBoxColumn();
         PriceColumn = new DataGridViewTextBoxColumn();
         TotalPriceColumn = new DataGridViewTextBoxColumn();
+        BindingSource = new BindingSource(components);
         MenuStrip.SuspendLayout();
         StatusStrip.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)DataGridView).BeginInit();
@@ -141,11 +141,8 @@ partial class MainForm
         DataGridView.Size = new Size(800, 404);
         DataGridView.TabIndex = 2;
         DataGridView.CellContentDoubleClick += DataGridView_CellContentDoubleClick;
+        DataGridView.CellFormatting += DataGridView_CellFormatting;
         DataGridView.SelectionChanged += DataGridView_SelectionChanged;
-        // 
-        // BindingSource
-        // 
-        BindingSource.ListChanged += BindingSource_ListChanged;
         // 
         // NameColumn
         // 
@@ -192,6 +189,10 @@ partial class MainForm
         TotalPriceColumn.HeaderText = "Общая сумма товара (руб.)";
         TotalPriceColumn.Name = "TotalPriceColumn";
         TotalPriceColumn.ReadOnly = true;
+        // 
+        // BindingSource
+        // 
+        BindingSource.ListChanged += BindingSource_ListChanged;
         // 
         // MainForm
         // 

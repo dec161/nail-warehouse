@@ -1,59 +1,39 @@
-﻿namespace NailWarehouse.App.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace NailWarehouse.App.Models;
 
 /// <summary>
-/// Материал. Enum-подобный класс.
+/// Материал.
 /// </summary>
-public record class Material
+public enum Material
 {
-    private readonly string value;
-
-    private static readonly HashSet<Material> Materials = [];
-
     /// <summary>
     /// Не указан.
     /// </summary>
-    public static readonly Material Null = Create("Не указан");
+    [Display(Name = "Не указан")]
+    Null,
 
     /// <summary>
     /// Медь.
     /// </summary>
-    public static readonly Material Copper = Create("Медь");
+    [Display(Name = "Медь")]
+    Copper,
 
     /// <summary>
     /// Сталь.
     /// </summary>
-    public static readonly Material Steel = Create("Сталь");
+    [Display(Name = "Сталь")]
+    Steel,
 
     /// <summary>
     /// Железо.
     /// </summary>
-    public static readonly Material Iron = Create("Железо");
+    [Display(Name = "Железо")]
+    Iron,
 
     /// <summary>
     /// Хром.
     /// </summary>
-    public static readonly Material Chrome = Create("Хром");
-
-    /// <summary>
-    /// Все материалы.
-    /// </summary>
-    public static readonly IReadOnlyList<Material> All = [.. Materials];
-
-    private static Material Create(string value)
-    {
-        var material = new Material(value);
-        Materials.Add(material);
-        return material;
-    }
-
-    private Material(string value) =>
-        this.value = value;
-
-    /// <inheritdoc/>
-    public override string ToString() =>
-        value;
-
-    /// <inheritdoc cref="ToString"/>
-    public static implicit operator string(Material material) =>
-        material.ToString();
+    [Display(Name = "Хром")]
+    Chrome
 }
