@@ -9,6 +9,7 @@ internal static class ControlExtensions
     /// <summary>
     /// Создаёт <see cref="Binding"/> и добавляет его в
     /// <see cref="Control.DataBindings"/> для <paramref name="control"/>.
+    /// <para/>
     /// Если у полученного свойства для <paramref name="dataSource"/> есть <see cref="ValidationAttribute"/>s,
     /// то настраивает <paramref name="errorProvider"/> на отображение ошибок валидации.
     /// </summary>
@@ -23,7 +24,54 @@ internal static class ControlExtensions
         var controlPropertyInfo = GetPropertyInfo(propertySelector);
         var dataMemberInfo = GetPropertyInfo(dataMemberSelector);
 
-        control.AddBinding(controlPropertyInfo.Name, dataSource, dataMemberInfo.Name);
+        control.ConfigureData(
+            controlPropertyInfo.Name,
+            dataSource,
+            dataMemberInfo,
+            errorProvider);
+    }
+
+    /// <summary>
+    /// Создаёт <see cref="Binding"/> и настраивает <paramref name="comboBox"/>
+    /// для выбора значений из <see cref="Enum"/>.
+    /// <para/>
+    /// Если у полученного свойства для <paramref name="dataSource"/>
+    /// есть <see cref="ValidationAttribute"/>s,
+    /// то настраивает <paramref name="errorProvider"/> на отображение ошибок валидации.
+    /// </summary>
+    public static void AddEnumBinding<T>(this ComboBox comboBox,
+        T dataSource,
+        Expression<Func<T, Enum>> dataMemberSelector,
+        ErrorProvider errorProvider)
+        where T : class
+    {
+        var dataMemberInfo = GetPropertyInfo(dataMemberSelector);
+
+        var enumValues = Enum.GetValues(dataMemberInfo.PropertyType)
+            .Cast<Enum>()
+            .Select(value => new { Value = value, Name = value.GetDisplayName() })
+            .ToArray();
+
+        var enumValue = enumValues[0];
+
+        comboBox.DisplayMember = nameof(enumValue.Name);
+        comboBox.ValueMember = nameof(enumValue.Value);
+        comboBox.DataSource = enumValues;
+
+        comboBox.ConfigureData(
+            nameof(ComboBox.SelectedValue),
+            dataSource,
+            dataMemberInfo,
+            errorProvider);
+    }
+
+    private static void ConfigureData(this Control control,
+        string propertyName,
+        object dataSource,
+        PropertyInfo dataMemberInfo,
+        ErrorProvider errorProvider)
+    {
+        control.AddBinding(propertyName, dataSource, dataMemberInfo.Name);
 
         if (Attribute.GetCustomAttributes(dataMemberInfo, typeof(ValidationAttribute)).Length > 0)
         {
