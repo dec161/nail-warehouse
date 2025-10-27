@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using NailWarehouse.App.Infrastructure;
+﻿using NailWarehouse.App.Infrastructure;
 using NailWarehouse.App.Models;
 
 namespace NailWarehouse.App.UI;
@@ -23,11 +21,11 @@ public partial class NailTypeFields : UserControl
     /// </summary>
     public void Bind(NailType nailType)
     {
-        AddBinding(NameTextBox, nameof(TextBox.Text), nailType, nameof(NailType.Name));
-        AddBinding(NailSizeFields, nameof(NailSizeFields.NailSize), nailType, nameof(NailType.Size));
-        AddBinding(AmountNumericUpDown, nameof(NumericUpDown.Value), nailType, nameof(NailType.Amount));
-        AddBinding(MinAmountNumericUpDown, nameof(NumericUpDown.Value), nailType, nameof(NailType.MinAmount));
-        AddBinding(PriceNumericUpDown, nameof(NumericUpDown.Value), nailType, nameof(NailType.Price));
+        NameTextBox.AddBinding(textBox => textBox.Text, nailType, nailType => nailType.Name, ErrorProvider);
+        NailSizeFields.AddBinding(nailSizeFields => nailSizeFields.NailSize, nailType, nailType => nailType.Size, ErrorProvider);
+        AmountNumericUpDown.AddBinding(numericUpDown => numericUpDown.Value, nailType, nailType => nailType.Amount, ErrorProvider);
+        MinAmountNumericUpDown.AddBinding(numericUpDown => numericUpDown.Value, nailType, nailType => nailType.MinAmount, ErrorProvider);
+        PriceNumericUpDown.AddBinding(numericUpDown => numericUpDown.Value, nailType, nailType => nailType.Price, ErrorProvider);
 
         AddMaterialBinding(nailType);
 
@@ -51,48 +49,6 @@ public partial class NailTypeFields : UserControl
         PriceNumericUpDown.Maximum = NailConstants.MaxPrice;
     }
 
-    private void AddBinding(Control control, string propertyName, NailType dataSource, string dataMember)
-    {
-        var binding = new Binding(propertyName, dataSource, dataMember)
-        {
-            DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged
-        };
-        control.DataBindings.Add(binding);
-
-        if (dataSource.GetType().GetProperty(dataMember) is not PropertyInfo info)
-        {
-            return;
-        }
-
-        var validationAttributes = Attribute.GetCustomAttributes(info, typeof(ValidationAttribute));
-
-        if (validationAttributes.Length <= 0)
-        {
-            return;
-        }
-
-        control.Validating += (sender, e) =>
-        {
-            ErrorProvider.SetError(control, string.Empty);
-
-            var context = new ValidationContext(dataSource)
-            {
-                MemberName = dataMember
-            };
-
-            var results = new List<ValidationResult>();
-
-            if (!Validator.TryValidateProperty(info.GetValue(dataSource), context, results))
-            {
-                e.Cancel = true;
-                if (results.FirstOrDefault() is ValidationResult result)
-                {
-                    ErrorProvider.SetError(control, result.ErrorMessage);
-                }
-            }
-        };
-    }
-
     private void AddMaterialBinding(NailType dataSource)
     {
         var materials = Enum.GetValues(typeof(Material))
@@ -105,34 +61,6 @@ public partial class NailTypeFields : UserControl
         MaterialComboBox.DisplayMember = nameof(material.Name);
         MaterialComboBox.ValueMember = nameof(material.Value);
 
-        var propertyName = nameof(ComboBox.SelectedValue);
-        var dataMember = nameof(NailType.Material);
-
-        var binding = new Binding(propertyName, dataSource, dataMember)
-        {
-            DataSourceUpdateMode = DataSourceUpdateMode.OnPropertyChanged
-        };
-        MaterialComboBox.DataBindings.Add(binding);
-
-        MaterialComboBox.Validating += (sender, e) =>
-        {
-            ErrorProvider.SetError(MaterialComboBox, string.Empty);
-
-            var context = new ValidationContext(dataSource)
-            {
-                MemberName = dataMember
-            };
-
-            var results = new List<ValidationResult>();
-
-            if (!Validator.TryValidateValue(MaterialComboBox.SelectedItem, context, results, NailType.MaterialValidationAttributes))
-            {
-                e.Cancel = true;
-                if (results.FirstOrDefault() is ValidationResult result)
-                {
-                    ErrorProvider.SetError(MaterialComboBox, result.ErrorMessage);
-                }
-            }
-        };
+        MaterialComboBox.AddBinding(comboBox => comboBox.SelectedValue!, dataSource, nailType => nailType.Material, ErrorProvider);
     }
 }
