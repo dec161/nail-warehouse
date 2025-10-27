@@ -71,7 +71,8 @@ internal static class ControlExtensions
         };
     }
 
-    private static PropertyInfo GetPropertyInfo<T>(Expression<Func<T, object>> expression)
+    private static PropertyInfo GetPropertyInfo<TSource, TProperty>(
+        Expression<Func<TSource, TProperty>> expression)
     {
         var body = (expression.Body as UnaryExpression)?.Operand
             ?? expression.Body;
