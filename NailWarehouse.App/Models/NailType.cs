@@ -1,16 +1,12 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace NailWarehouse.App.Models;
 
 /// <summary>
 /// Тип гвоздя.
 /// </summary>
-public class NailType : IEditableObject
+public class NailType
 {
-    private bool isEditing = false;
-    private NailType? backup = null;
-
     /// <summary>
     /// Идентификатор.
     /// </summary>
@@ -45,42 +41,4 @@ public class NailType : IEditableObject
     /// Цена в рублях без НДС.
     /// </summary>
     public decimal Price { get; set; }
-
-    public void BeginEdit()
-    {
-        if (isEditing)
-        {
-            return;
-        }
-
-        backup = (NailType)MemberwiseClone();
-        isEditing = true;
-    }
-
-    public void CancelEdit()
-    {
-        if (!isEditing || backup is null)
-        {
-            return;
-        }
-
-        Name = backup.Name;
-        Size = backup.Size;
-        Material = backup.Material;
-        Amount = backup.Amount;
-        MinAmount = backup.MinAmount;
-        Price = backup.Price;
-        isEditing = false;
-    }
-
-    public void EndEdit()
-    {
-        if (!isEditing)
-        {
-            return;
-        }
-
-        backup = null;
-        isEditing = false;
-    }
 }

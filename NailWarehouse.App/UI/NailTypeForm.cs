@@ -1,4 +1,5 @@
 ﻿using NailWarehouse.App.Models;
+using NailWarehouse.App.Services;
 
 namespace NailWarehouse.App.UI;
 
@@ -35,15 +36,16 @@ public partial class NailTypeForm : Form
     /// <param name="nailType">Объект <see cref="NailType"/> для изменения.</param>
     public static void EditNailType(NailType nailType)
     {
-        nailType.BeginEdit();
+        var editor = new NailTypeEditor(nailType);
+        editor.BeginEdit();
         using var form = new NailTypeForm(nailType);
         if (form.ShowDialog() == DialogResult.OK)
         {
-            nailType.EndEdit();
+            editor.EndEdit();
         }
         else
         {
-            nailType.CancelEdit();
+            editor.CancelEdit();
         }
     }
 
