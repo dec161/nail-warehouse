@@ -140,7 +140,7 @@ partial class MainForm
         DataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         DataGridView.Size = new Size(800, 404);
         DataGridView.TabIndex = 2;
-        DataGridView.CellContentDoubleClick += DataGridView_CellContentDoubleClick;
+        DataGridView.CellDoubleClick += DataGridView_CellDoubleClick;
         DataGridView.CellFormatting += DataGridView_CellFormatting;
         DataGridView.SelectionChanged += DataGridView_SelectionChanged;
         // 

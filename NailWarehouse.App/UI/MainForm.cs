@@ -104,7 +104,7 @@ public partial class MainForm : Form
         }
     }
 
-    private void DataGridView_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e) =>
+    private void DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e) =>
         EditSelection();
 
     private void DataGridView_SelectionChanged(object sender, EventArgs e)
