@@ -53,12 +53,25 @@ public partial class MainForm : Form
     private void UpdateStats()
     {
         var totalRows = nails.Count;
-        var totalPrice = nails.Sum(nailType => nailType.TotalPrice);
+        var totalPrice = nails.Sum(CalculateTotalPrice);
         var taxedTotalPrice = totalPrice * (1m + Tax);
 
         TotalRowsLabel.Text = $"Общее количество товарных позиций: {totalRows}";
         TotalPriceLabel.Text = $"Общая сумма товаров без НДС: {totalPrice:c}";
         TaxedTotalPriceLabel.Text = $"Общая сумма товаров с НДС {Tax:p0}: {taxedTotalPrice:c}";
+    }
+
+    private void UpdateCalculatedFields(int rowIndex)
+    {
+        if (BindingSource[rowIndex] is not NailType nailType)
+        {
+            return;
+        }
+
+        DataGridView
+            .Rows[rowIndex]
+            .Cells[TotalPriceColumn.Index]
+            .Value = CalculateTotalPrice(nailType);
     }
 
     private void EditSelection()
@@ -80,9 +93,13 @@ public partial class MainForm : Form
         AmountColumn.DataPropertyName = nameof(NailType.Amount);
         MinAmountColumn.DataPropertyName = nameof(NailType.MinAmount);
         PriceColumn.DataPropertyName = nameof(NailType.Price);
-        TotalPriceColumn.DataPropertyName = nameof(NailType.TotalPrice);
 
         DataGridView.DataSource = BindingSource;
+
+        for (var rowIndex = 0; rowIndex < BindingSource.Count; rowIndex++)
+        {
+            UpdateCalculatedFields(rowIndex);
+        }
     }
 
     private void AddButton_Click(object sender, EventArgs e)
@@ -123,6 +140,20 @@ public partial class MainForm : Form
         }
     }
 
-    private void BindingSource_ListChanged(object sender, ListChangedEventArgs e) =>
-        UpdateStats();
+    private void BindingSource_ListChanged(object sender, ListChangedEventArgs e)
+    {
+        if (e.ListChangedType != ListChangedType.ItemMoved)
+        {
+            UpdateStats();
+        }
+
+        if (e.ListChangedType == ListChangedType.ItemChanged
+            || e.ListChangedType == ListChangedType.ItemAdded)
+        {
+            UpdateCalculatedFields(e.NewIndex);
+        }
+    }
+
+    private static decimal CalculateTotalPrice(NailType nailType) =>
+        nailType.Amount * nailType.Price;
 }

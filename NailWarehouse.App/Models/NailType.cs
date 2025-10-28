@@ -46,11 +46,6 @@ public class NailType : IEditableObject
     /// </summary>
     public decimal Price { get; set; }
 
-    /// <summary>
-    /// Общая сумма товара.
-    /// </summary>
-    public decimal TotalPrice => Amount * Price;
-
     public void BeginEdit()
     {
         if (isEditing)
