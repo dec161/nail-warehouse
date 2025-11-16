@@ -1,4 +1,4 @@
-﻿using NailWarehouse.App.Models;
+﻿using NailWarehouse.Entities.Models;
 using System.ComponentModel;
 
 namespace NailWarehouse.App.Services;

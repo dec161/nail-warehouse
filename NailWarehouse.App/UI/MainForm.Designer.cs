@@ -205,6 +205,7 @@ partial class MainForm
         MainMenuStrip = MenuStrip;
         Name = "MainForm";
         Text = "Склад гвоздей";
+        FormClosed += MainForm_FormClosed;
         Load += MainForm_Load;
         MenuStrip.ResumeLayout(false);
         MenuStrip.PerformLayout();

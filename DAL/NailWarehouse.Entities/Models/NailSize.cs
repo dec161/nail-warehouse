@@ -1,4 +1,4 @@
-﻿namespace NailWarehouse.App.Models;
+﻿namespace NailWarehouse.Entities.Models;
 
 /// <summary>
 /// Размер гвоздя.

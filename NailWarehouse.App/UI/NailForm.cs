@@ -1,5 +1,5 @@
-﻿using NailWarehouse.App.Models;
-using NailWarehouse.App.Services;
+﻿using NailWarehouse.App.Services;
+using NailWarehouse.Entities.Models;
 
 namespace NailWarehouse.App.UI;
 
@@ -31,12 +31,16 @@ public partial class NailForm : Form
     /// Показывает модальное окна для изменения существующего <see cref="Nail"/>.
     /// </summary>
     /// <param name="nail">Объект <see cref="Nail"/> для изменения.</param>
-    public static void EditNail(Nail nail)
+    /// <returns><c>true</c>, если изменения были сохранены; <c>false</c>, если отменены.</returns>
+    public static bool EditNail(Nail nail)
     {
         var editor = new NailEditor(nail);
         editor.BeginEdit();
         using var form = new NailForm(nail);
-        if (form.ShowDialog() == DialogResult.OK)
+
+        var result = form.ShowDialog() == DialogResult.OK;
+
+        if (result)
         {
             editor.EndEdit();
         }
@@ -44,6 +48,8 @@ public partial class NailForm : Form
         {
             editor.CancelEdit();
         }
+
+        return result;
     }
 
     /// <summary>

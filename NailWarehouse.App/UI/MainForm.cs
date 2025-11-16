@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel;
 using NailWarehouse.App.Infrastructure;
-using NailWarehouse.App.Models;
+using NailWarehouse.Entities.Models;
+using NailWarehouse.EntityManager;
+using NailWarehouse.MemoryStorage.Contracts;
 
 namespace NailWarehouse.App.UI;
 
@@ -9,56 +11,27 @@ namespace NailWarehouse.App.UI;
 /// </summary>
 public partial class MainForm : Form
 {
-    private const decimal Tax = 0.2m;
+    private CancellationTokenSource CancellationTokenSource { get; } = new();
 
-    private readonly BindingList<Nail> nails =
-    [
-        new()
-        {
-            Name = "Строительные гвозди",
-            Size = new(3.5f, 90u),
-            Material = Material.Chrome,
-            Amount = 2u,
-            MinAmount = 1u,
-            Price = 3m
-        },
-        new()
-        {
-            Name = "Гвозди с потайной головкой",
-            Size = new(4f, 100u),
-            Material = Material.Steel,
-            Amount = 4u,
-            MinAmount = 2u,
-            Price = 6m
-        },
-        new()
-        {
-            Name = "Ершеные гвозди",
-            Size = new(2f, 150u),
-            Material = Material.Iron,
-            Amount = 5u,
-            MinAmount = 2u,
-            Price = 4.5m
-        }
-    ];
+    private NailManager NailManager { get; }
 
     /// <summary>
     /// Создаёт <see cref="MainForm"/>.
     /// </summary>
-    public MainForm()
+    public MainForm(IStorage<Nail> storage)
     {
+        NailManager = new(storage);
         InitializeComponent();
     }
 
-    private void UpdateStatistics()
+    private async Task UpdateStatistics()
     {
-        var totalRows = nails.Count;
-        var totalPrice = nails.Sum(CalculateTotalPrice);
-        var taxedTotalPrice = totalPrice * (1m + Tax);
+        var nailStatistics = await NailManager.GetStatistics(CancellationTokenSource.Token);
 
-        TotalRowsLabel.Text = $"Общее количество товарных позиций: {totalRows}";
-        TotalPriceLabel.Text = $"Общая сумма товаров без НДС: {totalPrice:c}";
-        TaxedTotalPriceLabel.Text = $"Общая сумма товаров с НДС {Tax:p0}: {taxedTotalPrice:c}";
+        TotalRowsLabel.Text = $"Общее количество товарных позиций: {nailStatistics.TotalRows}";
+        TotalPriceLabel.Text = $"Общая сумма товаров без НДС: {nailStatistics.TotalPrice:c}";
+        TaxedTotalPriceLabel.Text =
+            $"Общая сумма товаров с НДС {nailStatistics.Tax:p0}: {nailStatistics.TaxedTotalPrice:c}";
     }
 
     private void UpdateCalculatedFields(int rowIndex)
@@ -71,19 +44,25 @@ public partial class MainForm : Form
         DataGridView
             .Rows[rowIndex]
             .Cells[TotalPriceColumn.Index]
-            .Value = CalculateTotalPrice(nail);
+            .Value = NailManager.CalculateTotalPrice(nail);
     }
 
     private void EditSelection()
     {
-        var nail = (Nail)BindingSource.Current;
-        NailForm.EditNail(nail);
-        BindingSource.ResetCurrentItem();
+        if (BindingSource.Current is not Nail nail)
+        {
+            return;
+        }
+
+        if (!NailForm.EditNail(nail))
+        {
+            BindingSource.ResetCurrentItem();
+        }
     }
 
-    private void MainForm_Load(object sender, EventArgs e)
+    private async void MainForm_Load(object sender, EventArgs e)
     {
-        BindingSource.DataSource = nails;
+        BindingSource.DataSource = await NailManager.GetAll(CancellationTokenSource.Token);
 
         DataGridView.AutoGenerateColumns = false;
 
@@ -95,29 +74,27 @@ public partial class MainForm : Form
         PriceColumn.DataPropertyName = nameof(Nail.Price);
 
         DataGridView.DataSource = BindingSource;
-
-        for (var rowIndex = 0; rowIndex < BindingSource.Count; rowIndex++)
-        {
-            UpdateCalculatedFields(rowIndex);
-        }
     }
 
-    private void AddButton_Click(object sender, EventArgs e)
+    private async void AddButton_Click(object sender, EventArgs e)
     {
         if (NailForm.CreateNail() is Nail nail)
         {
-            nails.Add(nail);
+            await NailManager.Add(nail, CancellationTokenSource.Token);
+            BindingSource.ResetBindings(false);
         }
     }
 
     private void EditButton_Click(object sender, EventArgs e) =>
         EditSelection();
 
-    private void DeleteButton_Click(object sender, EventArgs e)
+    private async void DeleteButton_Click(object sender, EventArgs e)
     {
-        if (NailForm.AskDeleteNail() == DialogResult.OK)
+        if (NailForm.AskDeleteNail() == DialogResult.OK
+            && BindingSource.Current is Nail current)
         {
-            BindingSource.RemoveCurrent();
+            await NailManager.Remove(current, CancellationTokenSource.Token);
+            BindingSource.ResetBindings(false);
         }
     }
 
@@ -138,13 +115,17 @@ public partial class MainForm : Form
         {
             e.Value = material.GetDisplayName();
         }
+        else if (e.ColumnIndex == 0)
+        {
+            UpdateCalculatedFields(e.RowIndex);
+        }
     }
 
     private void BindingSource_ListChanged(object sender, ListChangedEventArgs e)
     {
         if (e.ListChangedType != ListChangedType.ItemMoved)
         {
-            UpdateStatistics();
+            _ = UpdateStatistics();
         }
 
         if (e.ListChangedType == ListChangedType.ItemChanged
@@ -154,6 +135,8 @@ public partial class MainForm : Form
         }
     }
 
-    private static decimal CalculateTotalPrice(Nail nail) =>
-        nail.Amount * nail.Price;
+    private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+    {
+        CancellationTokenSource.Cancel();
+    }
 }

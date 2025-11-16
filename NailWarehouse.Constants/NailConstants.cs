@@ -1,9 +1,9 @@
-﻿namespace NailWarehouse.App.Models;
+﻿namespace NailWarehouse.Constants;
 
 /// <summary>
 /// Константы.
 /// </summary>
-internal class NailConstants
+public class NailConstants
 {
     /// <summary>
     /// Минимальная длина названия гвоздя.
@@ -14,7 +14,7 @@ internal class NailConstants
     /// Минимальный диаметр гвоздя.
     /// </summary>
     public const float MinDiameter = 0.5f;
-    
+
     /// <summary>
     /// Минимальный диаметр гвоздя.
     /// </summary>
@@ -59,4 +59,9 @@ internal class NailConstants
     /// Максимальная цена.
     /// </summary>
     public const decimal MaxPrice = 10000m;
+
+    /// <summary>
+    /// НДС.
+    /// </summary>
+    public const decimal Tax = 0.2m;
 }

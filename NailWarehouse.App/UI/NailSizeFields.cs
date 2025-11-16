@@ -1,4 +1,5 @@
-﻿using NailWarehouse.App.Models;
+﻿using NailWarehouse.Constants;
+using NailWarehouse.Entities.Models;
 
 namespace NailWarehouse.App.UI;
 
