@@ -11,7 +11,7 @@ public partial class MainForm : Form
 {
     private const decimal Tax = 0.2m;
 
-    private readonly BindingList<NailType> nails =
+    private readonly BindingList<Nail> nails =
     [
         new()
         {
@@ -63,7 +63,7 @@ public partial class MainForm : Form
 
     private void UpdateCalculatedFields(int rowIndex)
     {
-        if (BindingSource[rowIndex] is not NailType nailType)
+        if (BindingSource[rowIndex] is not Nail nail)
         {
             return;
         }
@@ -71,13 +71,13 @@ public partial class MainForm : Form
         DataGridView
             .Rows[rowIndex]
             .Cells[TotalPriceColumn.Index]
-            .Value = CalculateTotalPrice(nailType);
+            .Value = CalculateTotalPrice(nail);
     }
 
     private void EditSelection()
     {
-        var nailType = (NailType)BindingSource.Current;
-        NailTypeForm.EditNailType(nailType);
+        var nail = (Nail)BindingSource.Current;
+        NailForm.EditNail(nail);
         BindingSource.ResetCurrentItem();
     }
 
@@ -87,12 +87,12 @@ public partial class MainForm : Form
 
         DataGridView.AutoGenerateColumns = false;
 
-        NameColumn.DataPropertyName = nameof(NailType.Name);
-        SizeColumn.DataPropertyName = nameof(NailType.Size);
-        MaterialColumn.DataPropertyName = nameof(NailType.Material);
-        AmountColumn.DataPropertyName = nameof(NailType.Amount);
-        MinAmountColumn.DataPropertyName = nameof(NailType.MinAmount);
-        PriceColumn.DataPropertyName = nameof(NailType.Price);
+        NameColumn.DataPropertyName = nameof(Nail.Name);
+        SizeColumn.DataPropertyName = nameof(Nail.Size);
+        MaterialColumn.DataPropertyName = nameof(Nail.Material);
+        AmountColumn.DataPropertyName = nameof(Nail.Amount);
+        MinAmountColumn.DataPropertyName = nameof(Nail.MinAmount);
+        PriceColumn.DataPropertyName = nameof(Nail.Price);
 
         DataGridView.DataSource = BindingSource;
 
@@ -104,9 +104,9 @@ public partial class MainForm : Form
 
     private void AddButton_Click(object sender, EventArgs e)
     {
-        if (NailTypeForm.CreateNailType() is NailType nailType)
+        if (NailForm.CreateNail() is Nail nail)
         {
-            nails.Add(nailType);
+            nails.Add(nail);
         }
     }
 
@@ -115,7 +115,7 @@ public partial class MainForm : Form
 
     private void DeleteButton_Click(object sender, EventArgs e)
     {
-        if (NailTypeForm.AskDeleteNailType() == DialogResult.OK)
+        if (NailForm.AskDeleteNail() == DialogResult.OK)
         {
             BindingSource.RemoveCurrent();
         }
@@ -154,6 +154,6 @@ public partial class MainForm : Form
         }
     }
 
-    private static decimal CalculateTotalPrice(NailType nailType) =>
-        nailType.Amount * nailType.Price;
+    private static decimal CalculateTotalPrice(Nail nail) =>
+        nail.Amount * nail.Price;
 }

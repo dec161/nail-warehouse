@@ -1,6 +1,6 @@
 ﻿namespace NailWarehouse.App.UI;
 
-partial class NailTypeFields
+partial class NailFields
 {
     /// <summary> 
     /// Required designer variable.
@@ -204,12 +204,12 @@ partial class NailTypeFields
         // 
         ErrorProvider.ContainerControl = this;
         // 
-        // NailTypeFields
+        // NailFields
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         Controls.Add(TableLayoutPanel);
-        Name = "NailTypeFields";
+        Name = "NailFields";
         Size = new Size(403, 222);
         TableLayoutPanel.ResumeLayout(false);
         TableLayoutPanel.PerformLayout();

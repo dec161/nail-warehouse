@@ -3,9 +3,9 @@
 namespace NailWarehouse.App.Models;
 
 /// <summary>
-/// Тип гвоздя.
+/// Гвозди.
 /// </summary>
-public class NailType
+public class Nail
 {
     /// <summary>
     /// Идентификатор.
