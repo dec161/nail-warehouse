@@ -50,7 +50,7 @@ public partial class MainForm : Form
         InitializeComponent();
     }
 
-    private void UpdateStats()
+    private void UpdateStatistics()
     {
         var totalRows = nails.Count;
         var totalPrice = nails.Sum(CalculateTotalPrice);
@@ -144,7 +144,7 @@ public partial class MainForm : Form
     {
         if (e.ListChangedType != ListChangedType.ItemMoved)
         {
-            UpdateStats();
+            UpdateStatistics();
         }
 
         if (e.ListChangedType == ListChangedType.ItemChanged
