@@ -9,8 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dec161.NailWarehouse.MemoryStorage" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BL\NailWarehouse.EntityManager\NailWarehouse.EntityManager.csproj" />
-    <ProjectReference Include="..\BL\NailWarehouse.MemoryStorage\NailWarehouse.MemoryStorage.csproj" />
     <ProjectReference Include="..\DAL\NailWarehouse.Entities\NailWarehouse.Entities.csproj" />
   </ItemGroup>
 
