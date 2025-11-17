@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BL\NailWarehouse.EntityManager\NailWarehouse.EntityManager.csproj" />
-    <ProjectReference Include="..\DAL\NailWarehouse.Entities\NailWarehouse.Entities.csproj" />
   </ItemGroup>
 
 </Project>
