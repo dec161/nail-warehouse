@@ -4,11 +4,37 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>Dec161.$(AssemblyName)</PackageId>
+    <Authors>dec161</Authors>
+    <Description>Memory Storage
+Бороздин Игорь ИП-22-3</Description>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>Storage; InMemoryStorage; ListStorage</PackageTags>
+    <Product>Dec161.$(AssemblyName)</Product>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\DAL\NailWarehouse.Entities\NailWarehouse.Entities.csproj" />
     <ProjectReference Include="..\NailWarehouse.MemoryStorage.Contracts\NailWarehouse.MemoryStorage.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
