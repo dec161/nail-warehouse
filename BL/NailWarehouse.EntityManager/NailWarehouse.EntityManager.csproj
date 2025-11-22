@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\DAL\NailWarehouse.MemoryStorage.Contracts\NailWarehouse.MemoryStorage.Contracts.csproj" />
     <ProjectReference Include="..\..\NailWarehouse.Constants\NailWarehouse.Constants.csproj" />
-    <ProjectReference Include="..\NailWarehouse.EntityExtensions\NailWarehouse.EntityExtensions.csproj" />
     <ProjectReference Include="..\NailWarehouse.EntityManager.Contracts\NailWarehouse.EntityManager.Contracts.csproj" />
-    <ProjectReference Include="..\NailWarehouse.MemoryStorage.Contracts\NailWarehouse.MemoryStorage.Contracts.csproj" />
+    <ProjectReference Include="..\NailWarehouse.EntityExtensions\NailWarehouse.EntityExtensions.csproj" />
   </ItemGroup>
 
 </Project>
