@@ -3,8 +3,18 @@ using System.Reflection;
 
 namespace NailWarehouse.App.Infrastructure;
 
+/// <summary>
+/// Расширения для <see cref="Enum"/>.
+/// </summary>
 internal static class EnumExtensions
 {
+    /// <summary>
+    /// Преобразует <paramref name="value"/> в строку.
+    /// </summary>
+    /// <returns>
+    /// Значение атрибута <see cref="DisplayAttribute"/> для <paramref name="value"/>,
+    /// если он есть; иначе, <c><paramref name="value"/>.ToString()</c>.
+    /// </returns>
     public static string GetDisplayName(this Enum value)
     {
         var valueString = value.ToString();

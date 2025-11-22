@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace NailWarehouse.App.Infrastructure;
 
+/// <summary>
+/// Расширения для <see cref="Control"/>.
+/// </summary>
 internal static class ControlExtensions
 {
     /// <summary>
