@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NailWarehouse.EntityManager
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NailWarehouse.EntityManager.Contracts", "BL\NailWarehouse.EntityManager.Contracts\NailWarehouse.EntityManager.Contracts.csproj", "{6F2F729B-FD8B-4852-8FC6-134025094F17}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NailWarehouse.EntityExtensions", "BL\NailWarehouse.EntityExtensions\NailWarehouse.EntityExtensions.csproj", "{65BC29C7-CB3B-4BF0-A2D0-731E220896BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{6F2F729B-FD8B-4852-8FC6-134025094F17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F2F729B-FD8B-4852-8FC6-134025094F17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F2F729B-FD8B-4852-8FC6-134025094F17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65BC29C7-CB3B-4BF0-A2D0-731E220896BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65BC29C7-CB3B-4BF0-A2D0-731E220896BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65BC29C7-CB3B-4BF0-A2D0-731E220896BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65BC29C7-CB3B-4BF0-A2D0-731E220896BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -65,6 +71,7 @@ Global
 		{4B4D9521-408A-48D7-A86E-7C0293A1B618} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{41F1D08C-F634-45C6-B28A-0DA1F9775EAC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{6F2F729B-FD8B-4852-8FC6-134025094F17} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{65BC29C7-CB3B-4BF0-A2D0-731E220896BC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D899AED8-3D21-4168-B35D-0135912C3EC8}
