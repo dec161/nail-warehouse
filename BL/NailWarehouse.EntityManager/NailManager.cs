@@ -1,5 +1,6 @@
 ﻿using NailWarehouse.Constants;
 using NailWarehouse.Entities.Models;
+using NailWarehouse.EntityManager.Contracts;
 using NailWarehouse.MemoryStorage.Contracts;
 
 namespace NailWarehouse.EntityManager;
@@ -7,25 +8,19 @@ namespace NailWarehouse.EntityManager;
 /// <summary>
 /// Класс для управления хранилищем.
 /// </summary>
-public class NailManager(IStorage<Nail> storage)
+public class NailManager(IStorage<Nail> storage) : INailManager
 {
     private IStorage<Nail> Storage { get; } = storage;
 
-    /// <inheritdoc cref="IStorage{T}.Add(T, CancellationToken)"/>
     public Task Add(Nail nail, CancellationToken cancellationToken = default) =>
         Storage.Add(nail, cancellationToken);
 
-    /// <inheritdoc cref="IStorage{T}.GetAll(CancellationToken)"/>
     public Task<IEnumerable<Nail>> GetAll(CancellationToken cancellationToken = default) =>
         Storage.GetAll(cancellationToken);
 
-    /// <inheritdoc cref="IStorage{T}.Remove(T, CancellationToken)"/>
     public Task Remove(Nail nail, CancellationToken cancellationToken = default) =>
         Storage.Remove(nail, cancellationToken);
 
-    /// <summary>
-    /// Получает статистику о товаре.
-    /// </summary>
     public async Task<NailStatistics> GetStatistics(CancellationToken cancellationToken = default)
     {
         var nails = await GetAll(cancellationToken);

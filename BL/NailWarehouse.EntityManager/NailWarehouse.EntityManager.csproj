@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DAL\NailWarehouse.Entities\NailWarehouse.Entities.csproj" />
     <ProjectReference Include="..\..\NailWarehouse.Constants\NailWarehouse.Constants.csproj" />
+    <ProjectReference Include="..\NailWarehouse.EntityManager.Contracts\NailWarehouse.EntityManager.Contracts.csproj" />
     <ProjectReference Include="..\NailWarehouse.MemoryStorage.Contracts\NailWarehouse.MemoryStorage.Contracts.csproj" />
   </ItemGroup>
 
