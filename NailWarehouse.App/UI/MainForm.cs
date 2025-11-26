@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using NailWarehouse.App.Infrastructure;
 using NailWarehouse.Entities.Models;
-using NailWarehouse.EntityManager;
-using NailWarehouse.MemoryStorage.Contracts;
+using NailWarehouse.EntityExtensions;
+using NailWarehouse.EntityManager.Contracts;
 
 namespace NailWarehouse.App.UI;
 
@@ -13,14 +13,14 @@ public partial class MainForm : Form
 {
     private CancellationTokenSource CancellationTokenSource { get; } = new();
 
-    private NailManager NailManager { get; }
+    private INailManager NailManager { get; }
 
     /// <summary>
     /// Создаёт <see cref="MainForm"/>.
     /// </summary>
-    public MainForm(IStorage<Nail> storage)
+    public MainForm(INailManager nailManager)
     {
-        NailManager = new(storage);
+        NailManager = nailManager;
         InitializeComponent();
     }
 
@@ -44,7 +44,7 @@ public partial class MainForm : Form
         DataGridView
             .Rows[rowIndex]
             .Cells[TotalPriceColumn.Index]
-            .Value = NailManager.CalculateTotalPrice(nail);
+            .Value = nail.CalculateTotalPrice();
     }
 
     private void EditSelection()

@@ -1,5 +1,6 @@
 ﻿using NailWarehouse.Constants;
 using NailWarehouse.Entities.Models;
+using NailWarehouse.EntityExtensions;
 using NailWarehouse.EntityManager.Contracts;
 using NailWarehouse.MemoryStorage.Contracts;
 
@@ -26,7 +27,7 @@ public class NailManager(IStorage<Nail> storage) : INailManager
         var nails = await GetAll(cancellationToken);
 
         var count = nails.Count();
-        var totalPrice = nails.Sum(CalculateTotalPrice);
+        var totalPrice = nails.Sum(nail => nail.CalculateTotalPrice());
         var taxedTotalPrice = (1 + NailConstants.Tax) * totalPrice;
 
         return new NailStatistics()
@@ -37,10 +38,4 @@ public class NailManager(IStorage<Nail> storage) : INailManager
             Tax = NailConstants.Tax
         };
     }
-
-    /// <summary>
-    /// Считает общую сумму товара.
-    /// </summary>
-    public static decimal CalculateTotalPrice(Nail item) =>
-        item.Amount * item.Price;
 }
