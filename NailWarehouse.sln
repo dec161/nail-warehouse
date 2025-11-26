@@ -3,21 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NailWarehouse.App", "NailWarehouse.App\NailWarehouse.App.csproj", "{94C308C0-D194-441A-BEF5-40D865514C64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NailWarehouse.App", "NailWarehouse.App\NailWarehouse.App.csproj", "{94C308C0-D194-441A-BEF5-40D865514C64}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BL", "BL", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{1F99EE5D-9238-40BC-AA56-33DD6A80BA5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NailWarehouse.Entities", "DAL\NailWarehouse.Entities\NailWarehouse.Entities.csproj", "{350496FA-D393-4279-B9C2-E3AC242E2C89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NailWarehouse.Entities", "DAL\NailWarehouse.Entities\NailWarehouse.Entities.csproj", "{350496FA-D393-4279-B9C2-E3AC242E2C89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NailWarehouse.MemoryStorage", "BL\NailWarehouse.MemoryStorage\NailWarehouse.MemoryStorage.csproj", "{60200C52-F6DC-484E-9B79-A10437B3A060}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NailWarehouse.MemoryStorage", "BL\NailWarehouse.MemoryStorage\NailWarehouse.MemoryStorage.csproj", "{60200C52-F6DC-484E-9B79-A10437B3A060}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NailWarehouse.MemoryStorage.Contracts", "BL\NailWarehouse.MemoryStorage.Contracts\NailWarehouse.MemoryStorage.Contracts.csproj", "{4B4D9521-408A-48D7-A86E-7C0293A1B618}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NailWarehouse.MemoryStorage.Contracts", "BL\NailWarehouse.MemoryStorage.Contracts\NailWarehouse.MemoryStorage.Contracts.csproj", "{4B4D9521-408A-48D7-A86E-7C0293A1B618}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NailWarehouse.Constants", "NailWarehouse.Constants\NailWarehouse.Constants.csproj", "{5BE78AC6-5BF5-4520-810B-878CD5BA5849}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NailWarehouse.Constants", "NailWarehouse.Constants\NailWarehouse.Constants.csproj", "{5BE78AC6-5BF5-4520-810B-878CD5BA5849}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NailWarehouse.EntityManager", "BL\NailWarehouse.EntityManager\NailWarehouse.EntityManager.csproj", "{41F1D08C-F634-45C6-B28A-0DA1F9775EAC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NailWarehouse.EntityManager", "BL\NailWarehouse.EntityManager\NailWarehouse.EntityManager.csproj", "{41F1D08C-F634-45C6-B28A-0DA1F9775EAC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NailWarehouse.EntityManager.Contracts", "BL\NailWarehouse.EntityManager.Contracts\NailWarehouse.EntityManager.Contracts.csproj", "{6F2F729B-FD8B-4852-8FC6-134025094F17}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{41F1D08C-F634-45C6-B28A-0DA1F9775EAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41F1D08C-F634-45C6-B28A-0DA1F9775EAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41F1D08C-F634-45C6-B28A-0DA1F9775EAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F2F729B-FD8B-4852-8FC6-134025094F17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F2F729B-FD8B-4852-8FC6-134025094F17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F2F729B-FD8B-4852-8FC6-134025094F17}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F2F729B-FD8B-4852-8FC6-134025094F17}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{60200C52-F6DC-484E-9B79-A10437B3A060} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{4B4D9521-408A-48D7-A86E-7C0293A1B618} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{41F1D08C-F634-45C6-B28A-0DA1F9775EAC} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{6F2F729B-FD8B-4852-8FC6-134025094F17} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D899AED8-3D21-4168-B35D-0135912C3EC8}
