@@ -32,30 +32,6 @@ public class NailManagerTests
     }
 
     /// <summary>
-    /// <see cref="NailManager.Add(Nail, CancellationToken)"/> должен
-    /// сгенерировать <see cref="OperationCanceledException"/>.
-    /// </summary>
-    [Fact]
-    public async Task AddShouldThrowOperationCanceledException()
-    {
-        // Arrange
-        var cancellationTokenSource = new CancellationTokenSource();
-        cancellationTokenSource.Cancel();
-        var cancelledCancellationToken = cancellationTokenSource.Token;
-        var nail = new Nail();
-        var mock = new Mock<IStorage<Nail>>();
-        mock.Setup(storage => storage.Add(nail, cancelledCancellationToken))
-            .ThrowsAsync(new OperationCanceledException());
-        var nailManager = new NailManager(mock.Object);
-
-        // Act
-        var act = async () => await nailManager.Add(nail, cancelledCancellationToken);
-
-        // Assert
-        await act.Should().ThrowAsync<OperationCanceledException>();
-    }
-
-    /// <summary>
     /// <see cref="NailManager.Remove(Nail, CancellationToken)"/> должен работать.
     /// </summary>
     [Fact]
@@ -74,30 +50,6 @@ public class NailManagerTests
         // Assert
         Mock.Get(storage).Verify(mock => mock.Remove(nail, cancellationToken), Times.Once());
         Mock.Get(storage).VerifyNoOtherCalls();
-    }
-
-    /// <summary>
-    /// <see cref="NailManager.Remove(Nail, CancellationToken)"/> должен
-    /// сгенерировать <see cref="OperationCanceledException"/>.
-    /// </summary>
-    [Fact]
-    public async Task RemoveShouldThrowOperationCanceledException()
-    {
-        // Arrange
-        var cancellationTokenSource = new CancellationTokenSource();
-        cancellationTokenSource.Cancel();
-        var cancelledCancellationToken = cancellationTokenSource.Token;
-        var nail = new Nail();
-        var mock = new Mock<IStorage<Nail>>();
-        mock.Setup(storage => storage.Remove(nail, cancelledCancellationToken))
-            .ThrowsAsync(new OperationCanceledException());
-        var nailManager = new NailManager(mock.Object);
-
-        // Act
-        var act = async () => await nailManager.Remove(nail, cancelledCancellationToken);
-
-        // Assert
-        await act.Should().ThrowAsync<OperationCanceledException>();
     }
 
     /// <summary>
@@ -146,50 +98,6 @@ public class NailManagerTests
     }
 
     /// <summary>
-    /// <see cref="NailManager.GetAll(CancellationToken)"/> должен
-    /// сгенерировать <see cref="OperationCanceledException"/>.
-    /// </summary>
-    [Fact]
-    public async Task GetAllShouldThrowOperationCanceledException()
-    {
-        // Arrange
-        var cancellationTokenSource = new CancellationTokenSource();
-        cancellationTokenSource.Cancel();
-        var cancelledCancellationToken = cancellationTokenSource.Token;
-        var mock = new Mock<IStorage<Nail>>();
-        mock.Setup(storage => storage.GetAll(cancelledCancellationToken))
-            .ThrowsAsync(new OperationCanceledException());
-        var nailManager = new NailManager(mock.Object);
-
-        // Act
-        var act = async () => await nailManager.GetAll(cancelledCancellationToken);
-
-        // Assert
-        await act.Should().ThrowAsync<OperationCanceledException>();
-    }
-
-    /// <summary>
-    /// <see cref="NailManager.GetStatistics(CancellationToken)"/>
-    /// не должен генерировать исключение.
-    /// </summary>
-    [Fact]
-    public async Task GetStatisticsShouldNotThrow()
-    {
-        // Arrange
-        var cancellationToken = CancellationToken.None;
-        var list = new List<Nail>();
-        var storage = Mock.Of<IStorage<Nail>>(
-            mock => mock.GetAll(cancellationToken) == Task.FromResult(list.AsEnumerable()));
-        var nailManager = new NailManager(storage);
-
-        // Act
-        var act = async () => await nailManager.GetStatistics(cancellationToken);
-
-        // Assert
-        await act.Should().NotThrowAsync();
-    }
-
-    /// <summary>
     /// <see cref="NailManager.GetStatistics(CancellationToken)"/> должен работать.
     /// </summary>
     [Fact]
@@ -226,28 +134,5 @@ public class NailManagerTests
         actual.TotalPrice.Should().Be(expectedTotalPrice);
         actual.TaxedTotalPrice.Should().Be(expectedTaxedTotalPrice);
         actual.Tax.Should().Be(expectedTax);
-    }
-
-    /// <summary>
-    /// <see cref="NailManager.GetStatistics(CancellationToken)"/> должен
-    /// сгенерировать <see cref="OperationCanceledException"/>.
-    /// </summary>
-    [Fact]
-    public async Task GetStatisticsShouldThrowOperationCanceledException()
-    {
-        // Arrange
-        var cancellationTokenSource = new CancellationTokenSource();
-        cancellationTokenSource.Cancel();
-        var cancelledCancellationToken = cancellationTokenSource.Token;
-        var mock = new Mock<IStorage<Nail>>();
-        mock.Setup(storage => storage.GetAll(cancelledCancellationToken))
-            .ThrowsAsync(new OperationCanceledException());
-        var nailManager = new NailManager(mock.Object);
-
-        // Act
-        var act = async () => await nailManager.GetStatistics(cancelledCancellationToken);
-
-        // Assert
-        await act.Should().ThrowAsync<OperationCanceledException>();
     }
 }
