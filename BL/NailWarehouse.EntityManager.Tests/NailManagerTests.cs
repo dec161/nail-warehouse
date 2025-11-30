@@ -11,109 +11,193 @@ namespace NailWarehouse.EntityManager.Tests;
 public class NailManagerTests
 {
     /// <summary>
-    /// Операции с одним предметом.
+    /// <see cref="NailManager.Add(Nail, CancellationToken)"/> должен работать.
     /// </summary>
-    public class SingleItemOperations
+    [Fact]
+    public async Task AddShouldWork()
     {
-        private readonly CancellationToken cancellationToken = CancellationToken.None;
-        private readonly Nail nail = new();
-        private readonly Mock<IStorage<Nail>> mock = new();
-        private readonly Task expected = Task.CompletedTask;
-        private readonly NailManager nailManager;
+        // Arrange
+        var cancellationToken = CancellationToken.None;
+        var nail = new Nail();
+        var storage = Mock.Of<IStorage<Nail>>(
+            mock => mock.Add(nail, cancellationToken) == Task.CompletedTask);
+        var nailManager = new NailManager(storage);
 
-        /// <summary>
-        /// Создаёт объект <see cref="SingleItemOperations"/>.
-        /// </summary>
-        public SingleItemOperations() =>
-            nailManager = new(mock.Object);
+        // Act
+        await nailManager.Add(nail, cancellationToken);
 
-        /// <summary>
-        /// <see cref="NailManager.Add(Nail, CancellationToken)"/> должен возвращать
-        /// результат вызова <see cref="IStorage{T}.Add(T, CancellationToken)"/>.
-        /// </summary>
-        [Fact]
-        public void AddReturnsAddTask()
-        {
-            // Arrange
-            mock.Setup(storage => storage.Add(nail, cancellationToken))
-                .Returns(expected);
-
-            // Act
-            var actual = nailManager.Add(nail, cancellationToken);
-
-            // Assert
-            actual.Should().BeSameAs(expected);
-            mock.Verify(storage => storage.Add(nail, cancellationToken), Times.Once());
-            mock.VerifyNoOtherCalls();
-        }
-
-        /// <summary>
-        /// <see cref="NailManager.Remove(Nail, CancellationToken)"/> должен возвращать
-        /// результат вызова <see cref="IStorage{T}.Remove(T, CancellationToken)"/>.
-        /// </summary>
-        [Fact]
-        public void RemoveReturnsRemoveTask()
-        {
-            // Arrange
-            mock.Setup(storage => storage.Remove(nail, cancellationToken))
-                .Returns(expected);
-
-            // Act
-            var actual = nailManager.Remove(nail, cancellationToken);
-
-            // Assert
-            actual.Should().BeSameAs(expected);
-            mock.Verify(storage => storage.Remove(nail, cancellationToken), Times.Once());
-            mock.VerifyNoOtherCalls();
-        }
+        // Assert
+        Mock.Get(storage).Verify(mock => mock.Add(nail, cancellationToken), Times.Once());
+        Mock.Get(storage).VerifyNoOtherCalls();
     }
 
     /// <summary>
-    /// Операции над всей коллекцией.
+    /// <see cref="NailManager.Add(Nail, CancellationToken)"/> должен
+    /// сгенерировать <see cref="InvalidOperationException"/>.
     /// </summary>
-    public class CollectionOperations
+    [Fact]
+    public async Task AddShouldThrowInvalidOperationException()
     {
-        private readonly CancellationToken cancellationToken = CancellationToken.None;
-        private readonly Mock<IStorage<Nail>> mock = new();
-        private readonly NailManager nailManager;
+        // Arrange
+        var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.Cancel();
+        var cancelledCancellationToken = cancellationTokenSource.Token;
+        var nail = new Nail();
+        var mock = new Mock<IStorage<Nail>>();
+        mock.Setup(storage => storage.Add(nail, cancelledCancellationToken))
+            .ThrowsAsync(new InvalidOperationException());
+        var nailManager = new NailManager(mock.Object);
 
-        /// <summary>
-        /// Создаёт объект <see cref="CollectionOperations"/>.
-        /// </summary>
-        public CollectionOperations() =>
-            nailManager = new(mock.Object);
+        // Act
+        var act = async () => await nailManager.Add(nail, cancelledCancellationToken);
 
-        /// <summary>
-        /// <see cref="NailManager.GetAll(CancellationToken)"/> должен возвращать
-        /// результат вызова <see cref="IStorage{T}.GetAll(CancellationToken)"/>.
-        /// </summary>
-        [Fact]
-        public void GetAllReturnsGetAllTask()
+        // Assert
+        await act.Should().ThrowAsync<InvalidOperationException>();
+    }
+
+    /// <summary>
+    /// <see cref="NailManager.Remove(Nail, CancellationToken)"/> должен работать.
+    /// </summary>
+    [Fact]
+    public async Task RemoveShouldWork()
+    {
+        // Arrange
+        var cancellationToken = CancellationToken.None;
+        var nail = new Nail();
+        var storage = Mock.Of<IStorage<Nail>>(
+            mock => mock.Remove(nail, cancellationToken) == Task.CompletedTask);
+        var nailManager = new NailManager(storage);
+
+        // Act
+        await nailManager.Remove(nail, cancellationToken);
+
+        // Assert
+        Mock.Get(storage).Verify(mock => mock.Remove(nail, cancellationToken), Times.Once());
+        Mock.Get(storage).VerifyNoOtherCalls();
+    }
+
+    /// <summary>
+    /// <see cref="NailManager.Remove(Nail, CancellationToken)"/> должен
+    /// сгенерировать <see cref="InvalidOperationException"/>.
+    /// </summary>
+    [Fact]
+    public async Task RemoveShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.Cancel();
+        var cancelledCancellationToken = cancellationTokenSource.Token;
+        var nail = new Nail();
+        var mock = new Mock<IStorage<Nail>>();
+        mock.Setup(storage => storage.Remove(nail, cancelledCancellationToken))
+            .ThrowsAsync(new InvalidOperationException());
+        var nailManager = new NailManager(mock.Object);
+
+        // Act
+        var act = async () => await nailManager.Remove(nail, cancelledCancellationToken);
+
+        // Assert
+        await act.Should().ThrowAsync<InvalidOperationException>();
+    }
+
+    /// <summary>
+    /// <see cref="NailManager.GetAll(CancellationToken)"/>
+    /// должен вернуть пустой <see cref="IEnumerable{T}"/>.
+    /// </summary>
+    [Fact]
+    public async Task GetAllShouldReturnEmpty()
+    {
+        // Arrange
+        var cancellationToken = CancellationToken.None;
+        var enumerable = new List<Nail>().AsEnumerable();
+        var storage = Mock.Of<IStorage<Nail>>(
+            mock => mock.GetAll(cancellationToken) == Task.FromResult(enumerable));
+        var nailManager = new NailManager(storage);
+
+        // Act
+        var actual = await nailManager.GetAll(cancellationToken);
+
+        // Assert
+        actual.Should().BeEmpty();
+    }
+
+    /// <summary>
+    /// <see cref="NailManager.GetAll(CancellationToken)"/>
+    /// должен вернуть <see cref="IEnumerable{T}"/> со значением.
+    /// </summary>
+    [Fact]
+    public async Task GetAllShouldReturnValue()
+    {
+        // Arrange
+        var cancellationToken = CancellationToken.None;
+        var expected = new List<Nail>()
         {
-            // Arrange
-            var enumerable = new List<Nail>().AsEnumerable();
-            var expected = Task.FromResult(enumerable);
-            mock.Setup(storage => storage.GetAll(cancellationToken))
-                .Returns(expected);
+            new()
+        }.AsEnumerable();
+        var storage = Mock.Of<IStorage<Nail>>(
+            mock => mock.GetAll(cancellationToken) == Task.FromResult(expected));
+        var nailManager = new NailManager(storage);
 
-            // Act
-            var actual = nailManager.GetAll(cancellationToken);
+        // Act
+        var actual = await nailManager.GetAll(cancellationToken);
 
-            // Assert
-            actual.Should().BeSameAs(expected);
-            mock.Verify(storage => storage.GetAll(cancellationToken), Times.Once());
-            mock.VerifyNoOtherCalls();
-        }
+        // Assert
+        actual.Should().BeEquivalentTo(expected);
+    }
 
-        /// <summary>
-        /// <see cref="NailManager.GetStatistics(CancellationToken)"/>
-        /// должен считать статистику верно.
-        /// </summary>
-        [Fact]
-        public async Task GetStatisticsCalculatesStatisticsCorrectly()
-        {
-            // Arrange
-            var list = new List<Nail>()
+    /// <summary>
+    /// <see cref="NailManager.GetAll(CancellationToken)"/> должен
+    /// сгенерировать <see cref="InvalidOperationException"/>.
+    /// </summary>
+    [Fact]
+    public async Task GetAllShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.Cancel();
+        var cancelledCancellationToken = cancellationTokenSource.Token;
+        var mock = new Mock<IStorage<Nail>>();
+        mock.Setup(storage => storage.GetAll(cancelledCancellationToken))
+            .ThrowsAsync(new InvalidOperationException());
+        var nailManager = new NailManager(mock.Object);
+
+        // Act
+        var act = async () => await nailManager.GetAll(cancelledCancellationToken);
+
+        // Assert
+        await act.Should().ThrowAsync<InvalidOperationException>();
+    }
+
+    /// <summary>
+    /// <see cref="NailManager.GetStatistics(CancellationToken)"/>
+    /// не должен генерировать исключение.
+    /// </summary>
+    [Fact]
+    public async Task GetStatisticsShouldNotThrow()
+    {
+        // Arrange
+        var cancellationToken = CancellationToken.None;
+        var list = new List<Nail>();
+        var storage = Mock.Of<IStorage<Nail>>(
+            mock => mock.GetAll(cancellationToken) == Task.FromResult(list.AsEnumerable()));
+        var nailManager = new NailManager(storage);
+
+        // Act
+        var act = async () => await nailManager.GetStatistics(cancellationToken);
+
+        // Assert
+        await act.Should().NotThrowAsync();
+    }
+
+    /// <summary>
+    /// <see cref="NailManager.GetStatistics(CancellationToken)"/> должен работать.
+    /// </summary>
+    [Fact]
+    public async Task GetStatisticsShouldWork()
+    {
+        // Arrange
+        var cancellationToken = CancellationToken.None;
+        var list = new List<Nail>()
             {
                 new()
                 {
@@ -126,21 +210,44 @@ public class NailManagerTests
                     Price = 7m
                 },
             };
-            mock.Setup(storage => storage.GetAll(cancellationToken))
-                .Returns(Task.FromResult(list.AsEnumerable()));
-            var expectedTotalRows = 2;
-            var expectedTotalPrice = 41m;
-            var expectedTaxedTotalPrice = 49.2m;
-            var expectedTax = 0.2m;
+        var storage = Mock.Of<IStorage<Nail>>(
+            mock => mock.GetAll(cancellationToken) == Task.FromResult(list.AsEnumerable()));
+        var nailManager = new NailManager(storage);
+        var expectedTotalRows = 2;
+        var expectedTotalPrice = 41m;
+        var expectedTaxedTotalPrice = 49.2m;
+        var expectedTax = 0.2m;
 
-            // Act
-            var actual = await nailManager.GetStatistics(cancellationToken);
+        // Act
+        var actual = await nailManager.GetStatistics(cancellationToken);
 
-            // Assert
-            actual.TotalRows.Should().Be(expectedTotalRows);
-            actual.TotalPrice.Should().Be(expectedTotalPrice);
-            actual.TaxedTotalPrice.Should().Be(expectedTaxedTotalPrice);
-            actual.Tax.Should().Be(expectedTax);
-        }
+        // Assert
+        actual.TotalRows.Should().Be(expectedTotalRows);
+        actual.TotalPrice.Should().Be(expectedTotalPrice);
+        actual.TaxedTotalPrice.Should().Be(expectedTaxedTotalPrice);
+        actual.Tax.Should().Be(expectedTax);
+    }
+
+    /// <summary>
+    /// <see cref="NailManager.GetStatistics(CancellationToken)"/> должен
+    /// сгенерировать <see cref="InvalidOperationException"/>.
+    /// </summary>
+    [Fact]
+    public async Task GetStatisticsShouldThrowInvalidOperationException()
+    {
+        // Arrange
+        var cancellationTokenSource = new CancellationTokenSource();
+        cancellationTokenSource.Cancel();
+        var cancelledCancellationToken = cancellationTokenSource.Token;
+        var mock = new Mock<IStorage<Nail>>();
+        mock.Setup(storage => storage.GetAll(cancelledCancellationToken))
+            .ThrowsAsync(new InvalidOperationException());
+        var nailManager = new NailManager(mock.Object);
+
+        // Act
+        var act = async () => await nailManager.GetStatistics(cancelledCancellationToken);
+
+        // Assert
+        await act.Should().ThrowAsync<InvalidOperationException>();
     }
 }
