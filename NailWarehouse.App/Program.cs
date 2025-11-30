@@ -20,8 +20,7 @@ internal static class Program
         var serilogger = new LoggerConfiguration()
             .MinimumLevel.Information()
             .Enrich.FromLogContext()
-            .WriteTo.File("log.txt", outputTemplate:
-            "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}")
+            .WriteTo.Seq("http://localhost:5341", apiKey: "9X4paYuhVmlYVgaMpWdo")
             .CreateLogger();
 
         var loggerFactory = new LoggerFactory()
