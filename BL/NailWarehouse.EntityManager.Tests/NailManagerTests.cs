@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NailWarehouse.Entities.Models;
+using NailWarehouse.EntityManager.Contracts;
 using NailWarehouse.MemoryStorage.Contracts;
 
 namespace NailWarehouse.EntityManager.Tests;
@@ -10,6 +12,17 @@ namespace NailWarehouse.EntityManager.Tests;
 /// </summary>
 public class NailManagerTests
 {
+    private readonly CancellationToken cancellationToken = CancellationToken.None;
+    private readonly Mock<IStorage<Nail>> storageMock = new();
+    private readonly ILogger<NailManager> logger = Mock.Of<ILogger<NailManager>>();
+    private readonly NailManager nailManager;
+
+    /// <summary>
+    /// Создаёт объект <see cref="NailManagerTests"/>.
+    /// </summary>
+    public NailManagerTests() =>
+        nailManager = new(storageMock.Object, logger);
+
     /// <summary>
     /// <see cref="NailManager.Add(Nail, CancellationToken)"/> должен работать.
     /// </summary>
@@ -17,18 +30,14 @@ public class NailManagerTests
     public async Task AddShouldWork()
     {
         // Arrange
-        var cancellationToken = CancellationToken.None;
         var nail = new Nail();
-        var storage = Mock.Of<IStorage<Nail>>(
-            mock => mock.Add(nail, cancellationToken) == Task.CompletedTask);
-        var nailManager = new NailManager(storage);
 
         // Act
         await nailManager.Add(nail, cancellationToken);
 
         // Assert
-        Mock.Get(storage).Verify(mock => mock.Add(nail, cancellationToken), Times.Once());
-        Mock.Get(storage).VerifyNoOtherCalls();
+        storageMock.Verify(mock => mock.Add(nail, cancellationToken), Times.Once());
+        storageMock.VerifyNoOtherCalls();
     }
 
     /// <summary>
@@ -38,18 +47,14 @@ public class NailManagerTests
     public async Task RemoveShouldWork()
     {
         // Arrange
-        var cancellationToken = CancellationToken.None;
         var nail = new Nail();
-        var storage = Mock.Of<IStorage<Nail>>(
-            mock => mock.Remove(nail, cancellationToken) == Task.CompletedTask);
-        var nailManager = new NailManager(storage);
 
         // Act
         await nailManager.Remove(nail, cancellationToken);
 
         // Assert
-        Mock.Get(storage).Verify(mock => mock.Remove(nail, cancellationToken), Times.Once());
-        Mock.Get(storage).VerifyNoOtherCalls();
+        storageMock.Verify(mock => mock.Remove(nail, cancellationToken), Times.Once());
+        storageMock.VerifyNoOtherCalls();
     }
 
     /// <summary>
@@ -60,11 +65,8 @@ public class NailManagerTests
     public async Task GetAllShouldReturnEmpty()
     {
         // Arrange
-        var cancellationToken = CancellationToken.None;
-        var enumerable = new List<Nail>().AsEnumerable();
-        var storage = Mock.Of<IStorage<Nail>>(
-            mock => mock.GetAll(cancellationToken) == Task.FromResult(enumerable));
-        var nailManager = new NailManager(storage);
+        storageMock.Setup(mock => mock.GetAll(cancellationToken))
+            .ReturnsAsync([]);
 
         // Act
         var actual = await nailManager.GetAll(cancellationToken);
@@ -81,14 +83,12 @@ public class NailManagerTests
     public async Task GetAllShouldReturnValue()
     {
         // Arrange
-        var cancellationToken = CancellationToken.None;
         var expected = new List<Nail>()
         {
             new()
-        }.AsEnumerable();
-        var storage = Mock.Of<IStorage<Nail>>(
-            mock => mock.GetAll(cancellationToken) == Task.FromResult(expected));
-        var nailManager = new NailManager(storage);
+        };
+        storageMock.Setup(mock => mock.GetAll(cancellationToken))
+            .ReturnsAsync(expected);
 
         // Act
         var actual = await nailManager.GetAll(cancellationToken);
@@ -104,35 +104,33 @@ public class NailManagerTests
     public async Task GetStatisticsShouldWork()
     {
         // Arrange
-        var cancellationToken = CancellationToken.None;
         var list = new List<Nail>()
+        {
+            new()
             {
-                new()
-                {
-                    Amount = 2u,
-                    Price = 3m
-                },
-                new()
-                {
-                    Amount = 5u,
-                    Price = 7m
-                },
-            };
-        var storage = Mock.Of<IStorage<Nail>>(
-            mock => mock.GetAll(cancellationToken) == Task.FromResult(list.AsEnumerable()));
-        var nailManager = new NailManager(storage);
-        var expectedTotalRows = 2;
-        var expectedTotalPrice = 41m;
-        var expectedTaxedTotalPrice = 49.2m;
-        var expectedTax = 0.2m;
+                Amount = 2u,
+                Price = 3m
+            },
+            new()
+            {
+                Amount = 5u,
+                Price = 7m
+            }
+        };
+        storageMock.Setup(mock => mock.GetAll(cancellationToken))
+            .ReturnsAsync(list);
+        var expected = new NailStatistics()
+        {
+            TotalRows = 2,
+            TotalPrice = 41m,
+            TaxedTotalPrice = 49.2m,
+            Tax = 0.2m
+        };
 
         // Act
         var actual = await nailManager.GetStatistics(cancellationToken);
 
         // Assert
-        actual.TotalRows.Should().Be(expectedTotalRows);
-        actual.TotalPrice.Should().Be(expectedTotalPrice);
-        actual.TaxedTotalPrice.Should().Be(expectedTaxedTotalPrice);
-        actual.Tax.Should().Be(expectedTax);
+        actual.Should().BeEquivalentTo(expected);
     }
 }
