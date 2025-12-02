@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using NailWarehouse.App.UI;
 using NailWarehouse.EntityManager;
-using NailWarehouse.EntityManager.Infrastructure;
 using NailWarehouse.MemoryStorage;
 using Serilog;
 
@@ -26,10 +25,9 @@ internal static class Program
         var loggerFactory = new LoggerFactory()
             .AddSerilog(serilogger);
 
-        var logger = loggerFactory.CreateLogger<TimedNailManager>();
+        var logger = loggerFactory.CreateLogger<NailManager>();
 
-        var nailManager = new NailManager(nails)
-            .WithPerformanceLogging(logger);
+        var nailManager = new NailManager(nails, logger);
 
         ApplicationConfiguration.Initialize();
         Application.Run(new MainForm(nailManager));
