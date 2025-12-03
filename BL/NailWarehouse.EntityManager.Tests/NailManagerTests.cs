@@ -14,15 +14,17 @@ public class NailManagerTests
 {
     private readonly CancellationToken cancellationToken = CancellationToken.None;
     private readonly Mock<IStorage<Nail>> storageMock = new();
-    private readonly ILoggerFactory loggerFactory = Mock.Of<ILoggerFactory>(
-        mock => mock.CreateLogger(It.IsAny<string>()) == Mock.Of<ILogger>());
     private readonly NailManager nailManager;
 
     /// <summary>
     /// Создаёт объект <see cref="NailManagerTests"/>.
     /// </summary>
-    public NailManagerTests() =>
+    public NailManagerTests()
+    {
+        var loggerFactory = Mock.Of<ILoggerFactory>(
+            factory => factory.CreateLogger(It.IsAny<string>()) == Mock.Of<ILogger>());
         nailManager = new(storageMock.Object, loggerFactory);
+    }
 
     /// <summary>
     /// <see cref="NailManager.Add(Nail, CancellationToken)"/> должен работать.
