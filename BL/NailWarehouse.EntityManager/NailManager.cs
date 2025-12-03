@@ -12,13 +12,13 @@ namespace NailWarehouse.EntityManager;
 /// <summary>
 /// Класс для управления хранилищем.
 /// </summary>
-public class NailManager(IStorage<Nail> storage, ILogger<NailManager> logger) : INailManager
+public class NailManager(IStorage<Nail> storage, ILoggerFactory loggerFactory) : INailManager
 {
     private const string LogMessageTemplate = "Метод {MethodName} выполнен за {ElapsedMilliseconds} мс";
 
     private IStorage<Nail> Storage { get; } = storage;
 
-    private ILogger Logger { get; } = logger;
+    private ILogger Logger { get; } = loggerFactory.CreateLogger<NailManager>();
 
     public Task Add(Nail nail, CancellationToken cancellationToken = default) =>
         LogPerformance(() => Storage.Add(nail, cancellationToken));

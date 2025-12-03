@@ -25,9 +25,7 @@ internal static class Program
         var loggerFactory = new LoggerFactory()
             .AddSerilog(serilogger);
 
-        var logger = loggerFactory.CreateLogger<NailManager>();
-
-        var nailManager = new NailManager(nails, logger);
+        var nailManager = new NailManager(nails, loggerFactory);
 
         ApplicationConfiguration.Initialize();
         Application.Run(new MainForm(nailManager));
