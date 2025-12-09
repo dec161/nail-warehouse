@@ -26,4 +26,9 @@ public interface INailManager
     /// Получает статистику о товарах.
     /// </summary>
     Task<NailStatistics> GetStatistics(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Обновляет товар во внутреннем хранилище.
+    /// </summary>
+    Task Update(Nail nail, CancellationToken cancellationToken = default);
 }

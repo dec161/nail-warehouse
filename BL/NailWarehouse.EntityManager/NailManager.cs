@@ -47,6 +47,9 @@ public class NailManager(IStorage<Nail> storage, ILoggerFactory loggerFactory) :
             };
         });
 
+    public Task Update(Nail nail, CancellationToken cancellationToken = default) =>
+        LogPerformance(() => Storage.Update(nail, cancellationToken));
+
     private T LogPerformance<T>(Func<T> func,
         [CallerMemberName] string callerMemberName = "")
     {
