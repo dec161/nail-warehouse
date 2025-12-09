@@ -143,6 +143,9 @@ public partial class MainForm : Form
         }
     }
 
+    private void UpdateButton_Click(object sender, EventArgs e) =>
+        _ = UpdateDataSource();
+
     private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
     {
         CancellationTokenSource.Cancel();
