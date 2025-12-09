@@ -12,7 +12,7 @@ public class NailDatabaseStorage : IStorage<Nail>
     public async Task Add(Nail item, CancellationToken cancellationToken = default)
     {
         using var database = new NailDatabaseContext();
-        await database.Nails.AddAsync(item, cancellationToken);
+        database.Nails.Add(item);
         await database.SaveChangesAsync(cancellationToken);
     }
 
