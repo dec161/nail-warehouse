@@ -35,6 +35,5 @@ public class NailDatabaseStorage : IStorage<Nail>
         using var database = new NailDatabaseContext();
         database.Nails.Update(item);
         await database.SaveChangesAsync(cancellationToken);
-
     }
 }
