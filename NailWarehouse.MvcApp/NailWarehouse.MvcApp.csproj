@@ -6,4 +6,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Serilog.Extensions.Logging" Version="10.0.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BL\NailWarehouse.EntityManager\NailWarehouse.EntityManager.csproj" />
+    <ProjectReference Include="..\DAL\NailWarehouse.DatabaseStorage\NailWarehouse.DatabaseStorage.csproj" />
+    <ProjectReference Include="..\NailWarehouse.Infrastructure\NailWarehouse.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
