@@ -1,7 +1,15 @@
+using NailWarehouse.DatabaseStorage;
+using NailWarehouse.Entities.Models;
+using NailWarehouse.EntityManager;
+using NailWarehouse.EntityManager.Contracts;
+using NailWarehouse.MemoryStorage.Contracts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IStorage<Nail>, NailDatabaseStorage>();
+builder.Services.AddScoped<INailManager, NailManager>();
 
 var app = builder.Build();
 

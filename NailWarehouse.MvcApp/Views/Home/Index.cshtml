@@ -1,8 +1,64 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using NailWarehouse.Entities.Models
+@using NailWarehouse.EntityExtensions
+@using NailWarehouse.Infrastructure
+@using NailWarehouse.MvcApp.Models
+
+@model IndexViewModel
+
+@{
+    ViewData["Title"] = "Просмотр товаров";
 }
 
+<a asp-action="Add" class="btn btn-primary">Добавить</a>
+<a asp-action="Index" class="btn btn-light">Обновить</a>
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Размер (мм)</th>
+                <th>Материал</th>
+                <th>Количество на складе</th>
+                <th>Минимальный предел количества</th>
+                <th>Цена без НДС (руб.)</th>
+                <th>Общая сумма товара (руб.)</th>
+                <th colspan="2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var nail in Model.Nails)
+            {
+                <tr>
+                    <td>@nail.Name</td>
+                    <td>@nail.Size</td>
+                    <td>@nail.Material.GetDisplayName()</td>
+                    <td>@nail.Amount</td>
+                    <td>@nail.MinAmount</td>
+                    <td>@nail.Price</td>
+                    <td>@nail.CalculateTotalPrice()</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@nail.Id" class="btn btn-sm btn-primary">
+                            Изменить
+                        </a>
+                    </td>
+                    <td>
+                        <a asp-action="Remove" asp-route-id="@nail.Id" class="btn btn-sm btn-danger">
+                            Удалить
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="9">
+                    Общее количество товарных позиций: @Model.Statistics.TotalRows |
+                    Общая сумма товаров без НДС: @Model.Statistics.TotalPrice.ToString("c") |
+                    Общая сумма товаров с НДС @Model.Statistics.Tax.ToString("p0"):
+                    @Model.Statistics.TaxedTotalPrice.ToString("c")
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 </div>

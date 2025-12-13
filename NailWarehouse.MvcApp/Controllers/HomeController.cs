@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using NailWarehouse.EntityManager.Contracts;
 using NailWarehouse.MvcApp.Models;
 using System.Diagnostics;
 
@@ -7,14 +8,27 @@ namespace NailWarehouse.MvcApp.Controllers;
 /// <summary>
 /// Контроллер для главной страницы.
 /// </summary>
-public class HomeController : Controller
+public class HomeController(INailManager nailManager) : Controller
 {
+    private CancellationTokenSource CancellationTokenSource { get; } = new();
+
+    private INailManager NailManager { get; } = nailManager;
+
     /// <summary>
     /// Отображает главную страницу.
     /// </summary>
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var statisticsTask = NailManager.GetStatistics(CancellationTokenSource.Token);
+        var nailsTask = NailManager.GetAll(CancellationTokenSource.Token);
+
+        var model = new IndexViewModel()
+        {
+            Nails = await nailsTask,
+            Statistics = await statisticsTask
+        };
+
+        return View(model);
     }
 
     /// <summary>
