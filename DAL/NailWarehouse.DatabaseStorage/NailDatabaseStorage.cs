@@ -23,6 +23,14 @@ public class NailDatabaseStorage : IStorage<Nail>
         return nails;
     }
 
+    public async Task<Nail?> Get(Guid id, CancellationToken cancellationToken = default)
+    {
+        using var database = new NailDatabaseContext();
+        var result = await database.Nails.AsNoTracking()
+            .FirstOrDefaultAsync(nail => nail.Id == id, cancellationToken);
+        return result;
+    }
+
     public async Task Remove(Nail item, CancellationToken cancellationToken = default)
     {
         using var database = new NailDatabaseContext();

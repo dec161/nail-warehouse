@@ -18,6 +18,15 @@ public interface INailManager
     Task<IEnumerable<Nail>> GetAll(CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Получает товар по его идентификатору.
+    /// </summary>
+    /// <returns>
+    /// Объект <see cref="Nail"/> с <see cref="Nail.Id"/>, равным <paramref name="id"/>,
+    /// если такой есть в хранилище; <c>null</c> иначе.
+    /// </returns>
+    Task<Nail?> Get(Guid id, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Удаляет товар из внутреннего хранилища.
     /// </summary>
     Task Remove(Nail nail, CancellationToken cancellationToken = default);
