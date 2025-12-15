@@ -1,4 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using NailWarehouse.Entities.Models;
 using NailWarehouse.EntityManager.Contracts;
 using NailWarehouse.MvcApp.Models;
 using System.Diagnostics;
@@ -10,6 +11,8 @@ namespace NailWarehouse.MvcApp.Controllers;
 /// </summary>
 public class HomeController(INailManager nailManager) : Controller
 {
+    private const string NailFormViewName = "NailForm";
+
     private CancellationTokenSource CancellationTokenSource { get; } = new();
 
     private INailManager NailManager { get; } = nailManager;
@@ -29,6 +32,99 @@ public class HomeController(INailManager nailManager) : Controller
         };
 
         return View(model);
+    }
+
+    /// <summary>
+    /// Отображает форму для добавления нового <see cref="Nail"/>.
+    /// </summary>
+    [HttpGet]
+    public IActionResult Add()
+    {
+        var viewModel = new NailFormViewModel()
+        {
+            PageTitle = "Добавление"
+        };
+
+        return View(NailFormViewName, viewModel);
+    }
+
+    /// <summary>
+    /// Проверяет и добавляет созданный <see cref="Nail"/>
+    /// в базу данных.
+    /// </summary>
+    [HttpPost]
+    public async Task<IActionResult> Add(NailFormViewModel viewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(NailFormViewName, viewModel);
+        }
+
+        var nail = new Nail()
+        {
+            Name = viewModel.Name,
+            Size = new(viewModel.Diameter, viewModel.Length),
+            Material = viewModel.Material,
+            Amount = viewModel.Amount,
+            MinAmount = viewModel.MinAmount,
+            Price = viewModel.Price
+        };
+        await NailManager.Add(nail, CancellationTokenSource.Token);
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    /// <summary>
+    /// Отображает форму для редактирования существующего <see cref="Nail"/>.
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> Edit(Guid id)
+    {
+        if (await NailManager.Get(id, CancellationTokenSource.Token) is not Nail nail)
+        {
+            return RedirectToAction(nameof(Index));
+        }
+
+        var viewModel = new NailFormViewModel()
+        {
+            PageTitle = "Изменение",
+            Id = nail.Id,
+            Name = nail.Name,
+            Diameter = nail.Size.Diameter,
+            Length = nail.Size.Length,
+            Material = nail.Material,
+            Amount = nail.Amount,
+            MinAmount = nail.MinAmount,
+            Price = nail.Price
+        };
+
+        return View(NailFormViewName, viewModel);
+    }
+
+    /// <summary>
+    /// Проверяет и сохраняет результат редактирования.
+    /// </summary>
+    [HttpPost]
+    public async Task<IActionResult> Edit(NailFormViewModel viewModel)
+    {
+        if (!ModelState.IsValid || viewModel.Id is not Guid id)
+        {
+            return View(NailFormViewName, viewModel);
+        }
+
+        var nail = new Nail()
+        {
+            Id = id,
+            Name = viewModel.Name,
+            Size = new(viewModel.Diameter, viewModel.Length),
+            Material = viewModel.Material,
+            Amount = viewModel.Amount,
+            MinAmount = viewModel.MinAmount,
+            Price = viewModel.Price
+        };
+        await NailManager.Update(nail, CancellationTokenSource.Token);
+
+        return RedirectToAction(nameof(Index));
     }
 
     /// <summary>
