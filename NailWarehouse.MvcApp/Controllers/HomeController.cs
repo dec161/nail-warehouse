@@ -128,6 +128,21 @@ public class HomeController(INailManager nailManager) : Controller
     }
 
     /// <summary>
+    /// Удаляет существующий <see cref="Nail"/>
+    /// из базы данных.
+    /// </summary>
+    [HttpPost]
+    public async Task<IActionResult> Remove(Guid id)
+    {
+        if (await NailManager.Get(id, CancellationTokenSource.Token) is Nail nail)
+        {
+            await NailManager.Remove(nail);
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    /// <summary>
     /// Отображает страницу ошибки.
     /// </summary>
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

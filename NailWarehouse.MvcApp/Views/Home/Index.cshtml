@@ -43,9 +43,11 @@
                         </a>
                     </td>
                     <td>
-                        <a asp-action="Remove" asp-route-id="@nail.Id" class="btn btn-sm btn-danger">
+                        <button type="button" class="btn btn-sm btn-danger"
+                                data-bs-toggle="modal" data-bs-target="#confirm-removal-modal"
+                                data-bs-id="@nail.Id">
                             Удалить
-                        </a>
+                        </button>
                     </td>
                 </tr>
             }
@@ -62,3 +64,36 @@
         </tfoot>
     </table>
 </div>
+
+<div class="modal fade" tabindex="-1" id="confirm-removal-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Удаление</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Вы уверены?</p>
+            </div>
+            <div class="modal-footer">
+                <form asp-action="Remove" method="post">
+                    <input type="hidden" id="id-to-remove" name="id" />
+                    <button type="submit" class="btn btn-primary">OK</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const modal = document.getElementById("confirm-removal-modal");
+        if (modal) {
+            const input = document.getElementById("id-to-remove");
+            modal.addEventListener("show.bs.modal", event => {
+                input.value = event.relatedTarget.getAttribute("data-bs-id");
+            });
+        }
+    </script>
+}
