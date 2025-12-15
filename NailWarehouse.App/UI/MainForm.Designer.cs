@@ -48,6 +48,7 @@ partial class MainForm
         PriceColumn = new DataGridViewTextBoxColumn();
         TotalPriceColumn = new DataGridViewTextBoxColumn();
         BindingSource = new BindingSource(components);
+        UpdateButton = new ToolStripMenuItem();
         MenuStrip.SuspendLayout();
         StatusStrip.SuspendLayout();
         ((System.ComponentModel.ISupportInitialize)DataGridView).BeginInit();
@@ -56,7 +57,7 @@ partial class MainForm
         // 
         // MenuStrip
         // 
-        MenuStrip.Items.AddRange(new ToolStripItem[] { AddButton, EditButton, DeleteButton });
+        MenuStrip.Items.AddRange(new ToolStripItem[] { AddButton, EditButton, DeleteButton, UpdateButton });
         MenuStrip.Location = new Point(0, 0);
         MenuStrip.Name = "MenuStrip";
         MenuStrip.Size = new Size(800, 24);
@@ -194,6 +195,13 @@ partial class MainForm
         // 
         BindingSource.ListChanged += BindingSource_ListChanged;
         // 
+        // UpdateButton
+        // 
+        UpdateButton.Name = "UpdateButton";
+        UpdateButton.Size = new Size(73, 20);
+        UpdateButton.Text = "Обновить";
+        UpdateButton.Click += UpdateButton_Click;
+        // 
         // MainForm
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
@@ -238,4 +246,5 @@ partial class MainForm
     private DataGridViewTextBoxColumn MinAmountColumn;
     private DataGridViewTextBoxColumn PriceColumn;
     private DataGridViewTextBoxColumn TotalPriceColumn;
+    private ToolStripMenuItem UpdateButton;
 }

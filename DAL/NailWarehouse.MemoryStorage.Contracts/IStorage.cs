@@ -20,4 +20,9 @@ public interface IStorage<T>
     /// Удаляет предмет из хранилища.
     /// </summary>
     Task Remove(T item, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Обновляет предмет в хранилище.
+    /// </summary>
+    Task Update(T item, CancellationToken cancellationToken = default);
 }

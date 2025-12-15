@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Logging;
 using NailWarehouse.App.UI;
+using NailWarehouse.DatabaseStorage;
 using NailWarehouse.EntityManager;
-using NailWarehouse.MemoryStorage;
 using Serilog;
 
 namespace NailWarehouse.App;
@@ -14,7 +14,7 @@ internal static class Program
     [STAThread]
     static void Main()
     {
-        var nails = new ListStorage();
+        var nails = new NailDatabaseStorage();
 
         var serilogger = new LoggerConfiguration()
             .MinimumLevel.Information()

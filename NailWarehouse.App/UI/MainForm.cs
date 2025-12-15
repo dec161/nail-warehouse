@@ -24,6 +24,12 @@ public partial class MainForm : Form
         InitializeComponent();
     }
 
+    private async Task UpdateDataSource()
+    {
+        BindingSource.DataSource = await NailManager.GetAll(CancellationTokenSource.Token);
+        BindingSource.ResetBindings(false);
+    }
+
     private async Task UpdateStatistics()
     {
         var nailStatistics = await NailManager.GetStatistics(CancellationTokenSource.Token);
@@ -47,17 +53,19 @@ public partial class MainForm : Form
             .Value = nail.CalculateTotalPrice();
     }
 
-    private void EditSelection()
+    private async Task EditSelection()
     {
         if (BindingSource.Current is not Nail nail)
         {
             return;
         }
 
-        if (!NailForm.EditNail(nail))
+        if (NailForm.EditNail(nail))
         {
-            BindingSource.ResetCurrentItem();
+            await NailManager.Update(nail, CancellationTokenSource.Token);
         }
+
+        BindingSource.ResetCurrentItem();
     }
 
     private async void MainForm_Load(object sender, EventArgs e)
@@ -81,12 +89,12 @@ public partial class MainForm : Form
         if (NailForm.CreateNail() is Nail nail)
         {
             await NailManager.Add(nail, CancellationTokenSource.Token);
-            BindingSource.ResetBindings(false);
+            _ = UpdateDataSource();
         }
     }
 
     private void EditButton_Click(object sender, EventArgs e) =>
-        EditSelection();
+        _ = EditSelection();
 
     private async void DeleteButton_Click(object sender, EventArgs e)
     {
@@ -94,12 +102,12 @@ public partial class MainForm : Form
             && BindingSource.Current is Nail current)
         {
             await NailManager.Remove(current, CancellationTokenSource.Token);
-            BindingSource.ResetBindings(false);
+            _ = UpdateDataSource();
         }
     }
 
     private void DataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e) =>
-        EditSelection();
+        _ = EditSelection();
 
     private void DataGridView_SelectionChanged(object sender, EventArgs e)
     {
@@ -134,6 +142,9 @@ public partial class MainForm : Form
             UpdateCalculatedFields(e.NewIndex);
         }
     }
+
+    private void UpdateButton_Click(object sender, EventArgs e) =>
+        _ = UpdateDataSource();
 
     private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
     {

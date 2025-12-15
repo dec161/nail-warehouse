@@ -56,4 +56,11 @@ public class ListStorage : IStorage<Nail>
         List.Remove(nail);
         return Task.CompletedTask;
     }
+
+    public Task Update(Nail nail, CancellationToken cancellationToken = default)
+    {
+        var index = List.FindIndex(item => item.Id == nail.Id);
+        List[index] = nail;
+        return Task.CompletedTask;
+    }
 }
