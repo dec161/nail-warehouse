@@ -1,4 +1,4 @@
-using NailWarehouse.DatabaseStorage;
+﻿using NailWarehouse.DatabaseStorage;
 using NailWarehouse.Entities.Models;
 using NailWarehouse.EntityManager;
 using NailWarehouse.EntityManager.Contracts;
@@ -7,7 +7,14 @@ using NailWarehouse.MemoryStorage.Contracts;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddMvcOptions(options =>
+    {
+        options.ModelBindingMessageProvider
+            .SetValueMustBeANumberAccessor(fieldName => $"Поле '{fieldName}' должно содержать число.");
+        options.ModelBindingMessageProvider
+            .SetValueMustNotBeNullAccessor(_ => $"Поле не должно быть пустым.");
+    });
 builder.Services.AddScoped<IStorage<Nail>, NailDatabaseStorage>();
 builder.Services.AddScoped<INailManager, NailManager>();
 

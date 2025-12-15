@@ -1,2 +1,16 @@
 ﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    var settings = {
+        validClass: "is-valid",
+        errorClass: "is-invalid"
+    };
+
+    $.validator.setDefaults(settings);
+    $.validator.unobtrusive.options = settings;
+
+    $.extend($.validator.messages, {
+        number: "Поле должно содержать число.",
+        step: "Поле должно содержать число, кратное {0}."
+     });
+</script>
