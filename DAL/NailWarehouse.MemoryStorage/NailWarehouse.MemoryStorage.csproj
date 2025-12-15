@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DAL\NailWarehouse.Entities\NailWarehouse.Entities.csproj" />
+    <ProjectReference Include="..\NailWarehouse.Entities\NailWarehouse.Entities.csproj" />
     <ProjectReference Include="..\NailWarehouse.MemoryStorage.Contracts\NailWarehouse.MemoryStorage.Contracts.csproj" />
   </ItemGroup>
 
