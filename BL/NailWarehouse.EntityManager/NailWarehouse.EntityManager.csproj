@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\NailWarehouse.Constants\NailWarehouse.Constants.csproj" />
+    <ProjectReference Include="..\NailWarehouse.EntityExtensions\NailWarehouse.EntityExtensions.csproj" />
+    <ProjectReference Include="..\NailWarehouse.EntityManager.Contracts\NailWarehouse.EntityManager.Contracts.csproj" />
+    <ProjectReference Include="..\NailWarehouse.MemoryStorage.Contracts\NailWarehouse.MemoryStorage.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

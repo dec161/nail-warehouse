@@ -1,6 +1,6 @@
 ﻿namespace NailWarehouse.App.UI;
 
-partial class NailTypeForm
+partial class NailForm
 {
     /// <summary>
     /// Required designer variable.
@@ -30,7 +30,7 @@ partial class NailTypeForm
     {
         SaveButton = new Button();
         CancelEditButton = new Button();
-        NailTypeFields = new NailTypeFields();
+        NailFields = new NailFields();
         SuspendLayout();
         // 
         // SaveButton
@@ -56,16 +56,16 @@ partial class NailTypeForm
         CancelEditButton.Text = "Отмена";
         CancelEditButton.UseVisualStyleBackColor = true;
         // 
-        // NailTypeFields
+        // NailFields
         // 
-        NailTypeFields.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-        NailTypeFields.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        NailTypeFields.Location = new Point(12, 12);
-        NailTypeFields.Name = "NailTypeFields";
-        NailTypeFields.Size = new Size(480, 218);
-        NailTypeFields.TabIndex = 4;
+        NailFields.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+        NailFields.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+        NailFields.Location = new Point(12, 12);
+        NailFields.Name = "NailFields";
+        NailFields.Size = new Size(480, 218);
+        NailFields.TabIndex = 4;
         // 
-        // NailTypeForm
+        // NailForm
         // 
         AcceptButton = SaveButton;
         AutoScaleDimensions = new SizeF(7F, 15F);
@@ -75,16 +75,16 @@ partial class NailTypeForm
         ControlBox = false;
         Controls.Add(CancelEditButton);
         Controls.Add(SaveButton);
-        Controls.Add(NailTypeFields);
+        Controls.Add(NailFields);
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
-        Name = "NailTypeForm";
+        Name = "NailForm";
         ShowIcon = false;
         ShowInTaskbar = false;
         StartPosition = FormStartPosition.CenterParent;
         Text = "Редактирование";
-        FormClosing += NailTypeForm_FormClosing;
+        FormClosing += NailForm_FormClosing;
         ResumeLayout(false);
     }
 
@@ -92,5 +92,5 @@ partial class NailTypeForm
 
     private Button SaveButton;
     private Button CancelEditButton;
-    private NailTypeFields NailTypeFields;
+    private NailFields NailFields;
 }

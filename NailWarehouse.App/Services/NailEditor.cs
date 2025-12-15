@@ -1,18 +1,18 @@
-﻿using NailWarehouse.App.Models;
+﻿using NailWarehouse.Entities.Models;
 using System.ComponentModel;
 
 namespace NailWarehouse.App.Services;
 
 /// <summary>
-/// Редактор для <see cref="NailType"/>,
+/// Редактор для <see cref="Nail"/>,
 /// позволяющий откатывать изменения.
 /// Применяет поверхностное копирование.
 /// </summary>
-internal class NailTypeEditor(NailType nailType) : IEditableObject
+internal class NailEditor(Nail nail) : IEditableObject
 {
     private bool isEditing = false;
-    private NailType? backup = null;
-    private readonly NailType nailType = nailType;
+    private Nail? backup = null;
+    private readonly Nail nail = nail;
 
     public void BeginEdit()
     {
@@ -23,11 +23,10 @@ internal class NailTypeEditor(NailType nailType) : IEditableObject
 
         backup = new()
         {
-            Id = nailType.Id
+            Id = nail.Id
         };
 
-        ShallowClone(nailType, backup);
-        
+        ShallowClone(nail, backup);
         isEditing = true;
     }
 
@@ -38,7 +37,7 @@ internal class NailTypeEditor(NailType nailType) : IEditableObject
             return;
         }
 
-        ShallowClone(backup, nailType);
+        ShallowClone(backup, nail);
         isEditing = false;
     }
 
@@ -53,7 +52,7 @@ internal class NailTypeEditor(NailType nailType) : IEditableObject
         isEditing = false;
     }
 
-    private static void ShallowClone(NailType source, NailType target)
+    private static void ShallowClone(Nail source, Nail target)
     {
         target.Name = source.Name;
         target.Size = source.Size;

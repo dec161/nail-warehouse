@@ -8,4 +8,12 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Dec161.NailWarehouse.MemoryStorage" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BL\NailWarehouse.EntityManager\NailWarehouse.EntityManager.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
-﻿using NailWarehouse.App.Models;
+﻿using NailWarehouse.Constants;
+using NailWarehouse.Entities.Models;
 
 namespace NailWarehouse.App.UI;
 
@@ -31,10 +32,10 @@ public partial class NailSizeFields : UserControl
     /// <summary>
     /// Устанавливает подходящие значения полей.
     /// </summary>
-    public void SetFieldValues(NailType nailType)
+    public void SetFieldValues(Nail nail)
     {
-        nailType.Size = new(Math.Clamp(nailType.Size.Diameter, NailConstants.MinDiameter, NailConstants.MaxDiameter),
-            Math.Clamp(nailType.Size.Length, NailConstants.MinLength, NailConstants.MaxLength));
+        nail.Size = new(Math.Clamp(nail.Size.Diameter, NailConstants.MinDiameter, NailConstants.MaxDiameter),
+            Math.Clamp(nail.Size.Length, NailConstants.MinLength, NailConstants.MaxLength));
         
         DiameterNumericUpDown.Minimum = (decimal)NailConstants.MinDiameter;
         DiameterNumericUpDown.Maximum = (decimal)NailConstants.MaxDiameter;

@@ -1,4 +1,6 @@
 using NailWarehouse.App.UI;
+using NailWarehouse.EntityManager;
+using NailWarehouse.MemoryStorage;
 
 namespace NailWarehouse.App;
 
@@ -10,9 +12,10 @@ internal static class Program
     [STAThread]
     static void Main()
     {
-        // To customize application configuration such as set high DPI settings or default font,
-        // see https://aka.ms/applicationconfiguration.
+        var nails = new ListStorage();
+        var nailManager = new NailManager(nails);
+
         ApplicationConfiguration.Initialize();
-        Application.Run(new MainForm());
+        Application.Run(new MainForm(nailManager));
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NailWarehouse.App.Models;
+namespace NailWarehouse.Entities.Models;
 
 /// <summary>
-/// Тип гвоздя.
+/// Гвозди.
 /// </summary>
-public class NailType
+public class Nail
 {
     /// <summary>
     /// Идентификатор.

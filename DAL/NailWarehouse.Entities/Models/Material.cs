@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace NailWarehouse.App.Models;
+namespace NailWarehouse.Entities.Models;
 
 /// <summary>
 /// Материал.
