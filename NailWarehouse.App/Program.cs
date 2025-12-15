@@ -1,6 +1,8 @@
+using Microsoft.Extensions.Logging;
 using NailWarehouse.App.UI;
 using NailWarehouse.EntityManager;
 using NailWarehouse.MemoryStorage;
+using Serilog;
 
 namespace NailWarehouse.App;
 
@@ -13,7 +15,17 @@ internal static class Program
     static void Main()
     {
         var nails = new ListStorage();
-        var nailManager = new NailManager(nails);
+
+        var serilogger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            .Enrich.FromLogContext()
+            .WriteTo.Seq("http://localhost:5341", apiKey: "9X4paYuhVmlYVgaMpWdo")
+            .CreateLogger();
+
+        var loggerFactory = new LoggerFactory()
+            .AddSerilog(serilogger);
+
+        var nailManager = new NailManager(nails, loggerFactory);
 
         ApplicationConfiguration.Initialize();
         Application.Run(new MainForm(nailManager));
