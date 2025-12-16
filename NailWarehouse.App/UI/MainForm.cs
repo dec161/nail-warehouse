@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
-using NailWarehouse.App.Infrastructure;
 using NailWarehouse.Entities.Models;
 using NailWarehouse.EntityExtensions;
 using NailWarehouse.EntityManager.Contracts;
+using NailWarehouse.Infrastructure;
 
 namespace NailWarehouse.App.UI;
 

@@ -1,0 +1,67 @@
+﻿@using NailWarehouse.Entities.Models
+@using NailWarehouse.Infrastructure
+
+@model NailFormViewModel
+
+@{
+    ViewData["Title"] = Model.PageTitle;
+}
+
+<form method="post" class="needs-validation">
+    @if (Model.Id is not null)
+    {
+        <input asp-for="Id" type="hidden" />
+    }
+
+    <div class="form-floating mb-3">
+        <input asp-for="Name" class="form-control" />
+        <label asp-for="Name"></label>
+        <span asp-validation-for="Name"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Diameter" type="number" step="0.5" class="form-control" />
+        <label asp-for="Diameter"></label>
+        <span asp-validation-for="Diameter"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Length" class="form-control" />
+        <label asp-for="Length"></label>
+        <span asp-validation-for="Length"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <select asp-for="Material" asp-items="Html.GetEnumSelectList<Material>().Skip(1)"
+                class="form-select">
+            <option value="" selected disabled>@Material.Null.GetDisplayName()</option>
+        </select>
+        <label asp-for="Material"></label>
+        <span asp-validation-for="Material"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Amount" class="form-control" />
+        <label asp-for="Amount"></label>
+        <span asp-validation-for="Amount"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="MinAmount" class="form-control" />
+        <label asp-for="MinAmount"></label>
+        <span asp-validation-for="MinAmount"></span>
+    </div>
+
+    <div class="form-floating mb-3">
+        <input asp-for="Price" type="number" class="form-control" />
+        <label asp-for="Price"></label>
+        <span asp-validation-for="Price"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a asp-action="Index" class="btn btn-danger">Отмена</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

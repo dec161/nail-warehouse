@@ -26,6 +26,9 @@ public class NailManager(IStorage<Nail> storage, ILoggerFactory loggerFactory) :
     public Task<IEnumerable<Nail>> GetAll(CancellationToken cancellationToken = default) =>
         LogPerformance(() => Storage.GetAll(cancellationToken));
 
+    public Task<Nail?> Get(Guid id, CancellationToken cancellationToken = default) =>
+        LogPerformance(() => Storage.Get(id, cancellationToken));
+
     public Task Remove(Nail nail, CancellationToken cancellationToken = default) =>
         LogPerformance(() => Storage.Remove(nail, cancellationToken));
 

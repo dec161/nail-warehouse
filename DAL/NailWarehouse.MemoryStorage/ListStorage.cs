@@ -51,6 +51,12 @@ public class ListStorage : IStorage<Nail>
         return Task.FromResult(result);
     }
 
+    public Task<Nail?> Get(Guid id, CancellationToken cancellationToken = default)
+    {
+        var result = List.Find(nail => nail.Id == id);
+        return Task.FromResult(result);
+    }
+
     public Task Remove(Nail nail, CancellationToken cancellationToken = default)
     {
         List.Remove(nail);

@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
-namespace NailWarehouse.App.Infrastructure;
+namespace NailWarehouse.Infrastructure;
 
 /// <summary>
 /// Расширения для <see cref="Enum"/>.
 /// </summary>
-internal static class EnumExtensions
+public static class EnumExtensions
 {
     /// <summary>
     /// Преобразует <paramref name="value"/> в строку.
@@ -21,7 +21,7 @@ internal static class EnumExtensions
 
         var attribute = value.GetType().GetMember(valueString).FirstOrDefault()
             ?.GetCustomAttribute(typeof(DisplayAttribute)) as DisplayAttribute;
-        
+
         return attribute?.Name ?? valueString;
     }
 }

@@ -17,6 +17,15 @@ public interface IStorage<T>
     Task<IEnumerable<T>> GetAll(CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Получает предмет по его идентификатору.
+    /// </summary>
+    /// <returns>
+    /// Объект <see cref="T"/> с идентификатором, равным <paramref name="id"/>,
+    /// если такой есть в хранилище; <c>null</c> иначе.
+    /// </returns>
+    Task<T?> Get(Guid id, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Удаляет предмет из хранилища.
     /// </summary>
     Task Remove(T item, CancellationToken cancellationToken = default);
