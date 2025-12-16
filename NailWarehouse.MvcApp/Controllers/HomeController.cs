@@ -13,17 +13,15 @@ public class HomeController(INailManager nailManager) : Controller
 {
     private const string NailFormViewName = "NailForm";
 
-    private CancellationTokenSource CancellationTokenSource { get; } = new();
-
     private INailManager NailManager { get; } = nailManager;
 
     /// <summary>
     /// Отображает главную страницу.
     /// </summary>
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var statisticsTask = NailManager.GetStatistics(CancellationTokenSource.Token);
-        var nailsTask = NailManager.GetAll(CancellationTokenSource.Token);
+        var statisticsTask = NailManager.GetStatistics(cancellationToken);
+        var nailsTask = NailManager.GetAll(cancellationToken);
 
         var model = new IndexViewModel()
         {
@@ -53,7 +51,7 @@ public class HomeController(INailManager nailManager) : Controller
     /// в базу данных.
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> Add(NailFormViewModel viewModel)
+    public async Task<IActionResult> Add(NailFormViewModel viewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid)
         {
@@ -69,7 +67,7 @@ public class HomeController(INailManager nailManager) : Controller
             MinAmount = viewModel.MinAmount,
             Price = viewModel.Price
         };
-        await NailManager.Add(nail, CancellationTokenSource.Token);
+        await NailManager.Add(nail, cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }
@@ -78,9 +76,9 @@ public class HomeController(INailManager nailManager) : Controller
     /// Отображает форму для редактирования существующего <see cref="Nail"/>.
     /// </summary>
     [HttpGet]
-    public async Task<IActionResult> Edit(Guid id)
+    public async Task<IActionResult> Edit(Guid id, CancellationToken cancellationToken)
     {
-        if (await NailManager.Get(id, CancellationTokenSource.Token) is not Nail nail)
+        if (await NailManager.Get(id, cancellationToken) is not Nail nail)
         {
             return RedirectToAction(nameof(Index));
         }
@@ -105,7 +103,7 @@ public class HomeController(INailManager nailManager) : Controller
     /// Проверяет и сохраняет результат редактирования.
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> Edit(NailFormViewModel viewModel)
+    public async Task<IActionResult> Edit(NailFormViewModel viewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid || viewModel.Id is not Guid id)
         {
@@ -122,7 +120,7 @@ public class HomeController(INailManager nailManager) : Controller
             MinAmount = viewModel.MinAmount,
             Price = viewModel.Price
         };
-        await NailManager.Update(nail, CancellationTokenSource.Token);
+        await NailManager.Update(nail, cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }
@@ -132,11 +130,11 @@ public class HomeController(INailManager nailManager) : Controller
     /// из базы данных.
     /// </summary>
     [HttpPost]
-    public async Task<IActionResult> Remove(Guid id)
+    public async Task<IActionResult> Remove(Guid id, CancellationToken cancellationToken)
     {
-        if (await NailManager.Get(id, CancellationTokenSource.Token) is Nail nail)
+        if (await NailManager.Get(id, cancellationToken) is Nail nail)
         {
-            await NailManager.Remove(nail, CancellationTokenSource.Token);
+            await NailManager.Remove(nail, cancellationToken);
         }
 
         return RedirectToAction(nameof(Index));
