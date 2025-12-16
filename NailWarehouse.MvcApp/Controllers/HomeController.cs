@@ -136,7 +136,7 @@ public class HomeController(INailManager nailManager) : Controller
     {
         if (await NailManager.Get(id, CancellationTokenSource.Token) is Nail nail)
         {
-            await NailManager.Remove(nail);
+            await NailManager.Remove(nail, CancellationTokenSource.Token);
         }
 
         return RedirectToAction(nameof(Index));
